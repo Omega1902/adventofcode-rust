@@ -48,10 +48,9 @@ fn challenge2(lines: &Vec<String>) -> i32 {
         // split connected words
         .map(|line| line.replace("oneight", "oneeight").replace("threeight", "threeeight").replace("nineight", "nineeight").replace("twone", "twoone").replace("sevenine", "sevennine").replace("eightwo", "eighttwo").replace("eighthree", "eightthree"))
         // find all digits in this line
-        .map(|line| regex.find_iter(line).map(|finding| finding.as_str()).collect::<Vec<&str>>()
-        )
+        .map(|line| regex.find_iter(&line).map(|finding| finding.as_str().to_owned()).collect())
         // maps list of digits into a 2 digits string
-        .map(|findings| format!("{}{}", to_digit(findings[0]), to_digit(findings.last().unwrap())))
+        .map(|findings: Vec<String>| format!("{}{}", to_digit(&findings[0]), to_digit(findings.last().unwrap())))
         // convert from string to number
         .map(|number_str| number_str.parse::<i32>().unwrap())
         .sum();
