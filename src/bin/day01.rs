@@ -1,14 +1,6 @@
-use std::fs::read_to_string;
 use std::collections::HashMap;
 use regex::Regex;
-
-fn read_lines(filename: &str) -> Vec<String> {
-    read_to_string(filename) 
-        .unwrap()  // panic on possible file-reading errors
-        .lines()  // split the string into an iterator of string slices
-        .map(String::from)  // make each slice into a string
-        .collect()  // gather them together into a vector
-}
+use adventofcode_rust::read_lines;
 
 fn challenge1(lines: &Vec<String>) -> i32 {
     let regex = Regex::new(r"\d").unwrap();
