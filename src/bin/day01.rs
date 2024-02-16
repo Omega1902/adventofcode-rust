@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use regex::Regex;
 use adventofcode_rust::read_lines;
+use adventofcode_rust::print_result;
 
 fn challenge1(lines: &Vec<String>) -> i32 {
     let regex = Regex::new(r"\d").unwrap();
@@ -49,16 +50,9 @@ fn challenge2(lines: &Vec<String>) -> i32 {
 }
 
 fn main() {
-    let day1challenge1_ex = read_lines("data/2023/day1_example_input.txt");
-    let day1challenge1 = read_lines("data/2023/day1_input.txt");
-    let day1challenge1_ex_res: i32 = challenge1(&day1challenge1_ex);
-    assert_eq!(day1challenge1_ex_res, 142);
-    println!("Day1 challenge 1 seems to work");
-    println!("Result challenge 1: {}", challenge1(&day1challenge1));
-    let day1challenge2_ex = read_lines("data/2023/day1_example_input2.txt");
-    let day1challenge2_ex_res: i32 = challenge2(&day1challenge2_ex);
-    assert_eq!(day1challenge2_ex_res, 281);
-    println!("Day1 challenge 2 seems to work");
-    println!("Result challenge 2: {}", challenge2(&day1challenge1));
-    // Wrong answers: 54095 (to low)
+    let challenge1_ex = read_lines("data/2023/day1_example_input.txt");
+    let challenge = read_lines("data/2023/day1_input.txt");
+    print_result(&1u8, &1u8, challenge1, &challenge1_ex, &challenge, &142);
+    let challenge2_ex = read_lines("data/2023/day1_example_input2.txt");
+    print_result(&1u8, &2u8, challenge2, &challenge2_ex, &challenge, &281);
 }
