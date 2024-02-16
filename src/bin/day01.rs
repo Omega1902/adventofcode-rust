@@ -1,14 +1,20 @@
-use std::collections::HashMap;
-use regex::Regex;
-use adventofcode_rust::read_lines;
 use adventofcode_rust::print_result;
+use adventofcode_rust::read_lines;
+use regex::Regex;
+use std::collections::HashMap;
 
 fn challenge1(lines: &Vec<String>) -> i32 {
     let regex = Regex::new(r"\d").unwrap();
 
-    return lines.iter()
+    return lines
+        .iter()
         // find all digit in this line
-        .map(|line| regex.find_iter(line).map(|finding| finding.as_str()).collect::<Vec<&str>>())
+        .map(|line| {
+            regex
+                .find_iter(line)
+                .map(|finding| finding.as_str())
+                .collect::<Vec<&str>>()
+        })
         // maps list of digits into a 2 digits string
         .map(|findings| format!("{}{}", findings[0], findings.last().unwrap()))
         // convert from string to number
@@ -37,11 +43,25 @@ fn to_digit(num: &str) -> &str {
 fn challenge2(lines: &Vec<String>) -> i32 {
     let regex = Regex::new(r"\d|one|two|three|four|five|six|seven|eight|nine").unwrap();
 
-    return lines.iter()
+    return lines
+        .iter()
         // split connected words
-        .map(|line| line.replace("oneight", "oneeight").replace("threeight", "threeeight").replace("nineight", "nineeight").replace("twone", "twoone").replace("sevenine", "sevennine").replace("eightwo", "eighttwo").replace("eighthree", "eightthree"))
+        .map(|line| {
+            line.replace("oneight", "oneeight")
+                .replace("threeight", "threeeight")
+                .replace("nineight", "nineeight")
+                .replace("twone", "twoone")
+                .replace("sevenine", "sevennine")
+                .replace("eightwo", "eighttwo")
+                .replace("eighthree", "eightthree")
+        })
         // find all digits in this line
-        .map(|line| regex.find_iter(&line).map(|finding| finding.as_str().to_owned()).collect())
+        .map(|line| {
+            regex
+                .find_iter(&line)
+                .map(|finding| finding.as_str().to_owned())
+                .collect()
+        })
         // maps list of digits into a 2 digits string
         .map(|findings: Vec<String>| format!("{}{}", to_digit(&findings[0]), to_digit(findings.last().unwrap())))
         // convert from string to number
