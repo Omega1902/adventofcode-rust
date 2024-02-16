@@ -28,6 +28,21 @@ fn challenge1(lines: &Vec<String>, red: &u32, green: &u32, blue: &u32) -> u32 {
     }).sum();
 }
 
+fn get_game_power(runs: &str) -> u32 {
+    static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?<count>\d+) (?<color>red|blue|green)").unwrap());
+    //TODO: split into a single run, extract how many items of each color where neded, calculate the minimum of each color of all runs of the game, multiply them.
+    // runs.split(";").map(|run| RE.captures_iter(run).)
+    //.reduce(f)
+}
+
+fn challenge2(lines: &Vec<String>) -> u32 {
+    return lines.iter().map(|line|{        
+        let mut parts = line.split(": ");
+        parts.next(); // waste it
+        return get_game_power(parts.next().unwrap());
+    }).sum();
+}
+
 fn main() {
     let red = 12u32;
     let green = 13u32;
@@ -36,11 +51,10 @@ fn main() {
     let challenge1_input = read_lines("data/2023/day2_input.txt");
     let challenge1_result_example: u32 = challenge1(&challenge1_input_example, &red, &green, &blue);
     assert_eq!(challenge1_result_example, 8);
-    println!("Day1 challenge 1 seems to work");
+    println!("Day2 challenge 1 seems to work");
     println!("Result challenge 1: {}", challenge1(&challenge1_input, &red, &green, &blue));
-    // let day1challenge2_ex = read_lines("data/2023/day1_example_input2.txt");
-    // let day1challenge2_ex_res: i32 = challenge2(&day1challenge2_ex);
-    // assert_eq!(day1challenge2_ex_res, 281);
-    // println!("Day1 challenge 2 seems to work");
-    // println!("Result challenge 2: {}", challenge2(&day1challenge1));
+    let challenge2_result_example: u32 = challenge2(&challenge1_input_example);
+    assert_eq!(challenge2_result_example, 2286);
+    println!("Day2 challenge 2 seems to work");
+    println!("Result challenge 2: {}", challenge2(&challenge1_input));
 }
