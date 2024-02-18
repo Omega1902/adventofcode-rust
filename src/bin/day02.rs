@@ -82,20 +82,6 @@ fn challenge2(lines: &Vec<String>) -> i32 {
 fn main() {
     let challenge_input_example = read_lines("data/2023/day2_example_input.txt");
     let challenge_input = read_lines("data/2023/day2_input.txt");
-    print_result(
-        &2u8,
-        &1u8,
-        challenge1,
-        &challenge_input_example,
-        &challenge_input,
-        &8i32,
-    );
-    print_result(
-        &2u8,
-        &2u8,
-        challenge2,
-        &challenge_input_example,
-        &challenge_input,
-        &2286i32,
-    );
+    print_result(2, 1, challenge1, &challenge_input_example, &challenge_input, 8);
+    print_result(2, 2, challenge2, &challenge_input_example, &challenge_input, 2286);
 }

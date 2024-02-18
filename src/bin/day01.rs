@@ -72,7 +72,7 @@ fn challenge2(lines: &Vec<String>) -> i32 {
 fn main() {
     let challenge1_ex = read_lines("data/2023/day1_example_input.txt");
     let challenge = read_lines("data/2023/day1_input.txt");
-    print_result(&1u8, &1u8, challenge1, &challenge1_ex, &challenge, &142);
+    print_result(1, 1, challenge1, &challenge1_ex, &challenge, 142);
     let challenge2_ex = read_lines("data/2023/day1_example_input2.txt");
-    print_result(&1u8, &2u8, challenge2, &challenge2_ex, &challenge, &281);
+    print_result(1, 2, challenge2, &challenge2_ex, &challenge, 281);
 }
