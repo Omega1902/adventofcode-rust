@@ -72,13 +72,136 @@ fn challenge1(lines: &Vec<String>) -> isize {
     sum
 }
 
+fn is_number(index: usize, line: &str) -> bool {
+    NUMBERS.contains(&(line.get(index..index + 1).unwrap_or(IGNORE_CHAR)))
+}
+
+fn get_numbers_on_index(index: usize, line: Option<&String>) -> Vec<usize> {
+    if line.is_none() {
+        return vec![];
+    }
+
+    let mut result: Vec<usize> = vec![];
+    let temp_line = line.unwrap();
+    if index > 0 {
+        if is_number(index - 1, temp_line) {
+            result.push(index - 1);
+        }
+    }
+    if is_number(index, temp_line) {
+        result.push(index)
+    }
+    if is_number(index + 1, temp_line) {
+        result.push(index + 1);
+    }
+    result
+}
+
+fn get_number_count(row_findings: &Vec<usize>) -> usize {
+    if row_findings.is_empty() {
+        0
+    } else if row_findings.len() == 1 || row_findings.len() >= 3 || row_findings[1] - row_findings[0] == 1 {
+        1
+    } else {
+        2
+    }
+}
+
+fn get_full_number(index: usize, line: &str) -> isize {
+    let mut end = index + 1; // non-inclusive
+    while let Some(c) = line.get(end..end + 1) {
+        if !NUMBERS.contains(&c) {
+            break;
+        }
+        end += 1;
+    }
+    let mut start = index; //inclusive
+    while let Some(c) = line.get(start - 1..start) {
+        if !NUMBERS.contains(&c) {
+            break;
+        }
+        start -= 1;
+        if start == 0 {
+            break;
+        }
+    }
+    line.get(start..end).unwrap().parse().unwrap()
+}
+
+fn get_full_numbers_of_vec(numbers: &Vec<usize>, line: Option<&String>) -> isize {
+    if numbers.is_empty() {
+        return 1;
+    }
+    if numbers.len() == 1 || numbers.len() >= 3 || numbers[1] - numbers[0] == 1 {
+        get_full_number(numbers[0], line.unwrap())
+    } else {
+        get_full_number(numbers[0], line.unwrap()) * get_full_number(numbers[1], line.unwrap())
+    }
+}
+
+fn get_gear_value(index: usize, line: &str, prev_line: Option<&String>, next_line: Option<&String>) -> isize {
+    let top: Vec<usize> = get_numbers_on_index(index, prev_line);
+    let mut left: Option<usize> = None;
+    let mut right: Option<usize> = None;
+    let bot: Vec<usize> = get_numbers_on_index(index, next_line);
+    if index > 0 && is_number(index - 1, line) {
+        left = Some(index - 1);
+    }
+    if is_number(index + 1, line) {
+        right = Some(index + 1);
+    }
+
+    // validate that there are exactly 2 numbers surrounding gear
+    let mut numbers_count = get_number_count(&top) + get_number_count(&bot);
+    if left.is_some() {
+        numbers_count += 1;
+    }
+    if right.is_some() {
+        numbers_count += 1;
+    }
+    if numbers_count != 2 {
+        return 0;
+    }
+
+    // find the complete surrounding numbers
+    let mut product: isize = 1;
+    if left.is_some() {
+        product *= get_full_number(left.unwrap(), line);
+    }
+    if right.is_some() {
+        product *= get_full_number(right.unwrap(), line);
+    }
+    product *= get_full_numbers_of_vec(&top, prev_line);
+    product *= get_full_numbers_of_vec(&bot, next_line);
+
+    product
+}
+
 fn challenge2(lines: &Vec<String>) -> isize {
-    0
+    // sum the product of all gear numbers
+    let mut sum: isize = 0;
+    for (line_number, line) in lines.iter().enumerate() {
+        let prev_line = if line_number == 0 {
+            None
+        } else {
+            lines.get(line_number - 1)
+        };
+        let next_line = lines.get(line_number + 1);
+        let mut index: usize = 0;
+        let mut remaining_line = line.get(index..).unwrap();
+        while let Some(gear) = remaining_line.find("*") {
+            index += gear;
+            sum += get_gear_value(index, line, prev_line, next_line);
+            index += 1;
+            remaining_line = line.get(index..).unwrap();
+        }
+    }
+    sum
 }
 
 fn main() {
     let input_example = read_lines("data/2023/day3_example_input.txt");
     let input = read_lines("data/2023/day3_input.txt");
     print_result(3, 1, challenge1, &input_example, &input, 4361);
-    // print_result(3, 2, challenge2, &challenge_input_example, &challenge_input, 2286);
+    print_result(3, 2, challenge2, &input_example, &input, 467835);
 }
