@@ -40,8 +40,8 @@ fn get_number(index: usize, line: &str, previous_line: Option<&String>, next_lin
     }
 }
 
-fn challenge1(lines: &Vec<String>) -> i32 {
-    let mut sum = 0;
+fn challenge1(lines: &Vec<String>) -> isize {
+    let mut sum: isize = 0;
     for (line_number, line) in lines.iter().enumerate() {
         let mut index: usize = 0;
         let prev_line = if line_number == 0 {
@@ -63,13 +63,17 @@ fn challenge1(lines: &Vec<String>) -> i32 {
                 sum += line
                     .get(word_start..word_start + length)
                     .unwrap()
-                    .parse::<i32>()
+                    .parse::<isize>()
                     .unwrap();
             }
             index = word_start + length;
         }
     }
     sum
+}
+
+fn challenge2(lines: &Vec<String>) -> isize {
+    0
 }
 
 fn main() {

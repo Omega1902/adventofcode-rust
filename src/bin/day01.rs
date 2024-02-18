@@ -3,10 +3,10 @@ use adventofcode_rust::read_lines;
 use regex::Regex;
 use std::collections::HashMap;
 
-fn challenge1(lines: &Vec<String>) -> i32 {
+fn challenge1(lines: &Vec<String>) -> isize {
     let regex = Regex::new(r"\d").unwrap();
 
-    return lines
+    lines
         .iter()
         // find all digit in this line
         .map(|line| {
@@ -18,8 +18,8 @@ fn challenge1(lines: &Vec<String>) -> i32 {
         // maps list of digits into a 2 digits string
         .map(|findings| format!("{}{}", findings[0], findings.last().unwrap()))
         // convert from string to number
-        .map(|number_str| number_str.parse::<i32>().unwrap())
-        .sum();
+        .map(|number_str| number_str.parse::<isize>().unwrap())
+        .sum()
 }
 
 fn to_digit(num: &str) -> &str {
@@ -37,13 +37,13 @@ fn to_digit(num: &str) -> &str {
         ("eight", "8"),
         ("nine", "9"),
     ]);
-    return map[num];
+    map[num]
 }
 
-fn challenge2(lines: &Vec<String>) -> i32 {
+fn challenge2(lines: &Vec<String>) -> isize {
     let regex = Regex::new(r"\d|one|two|three|four|five|six|seven|eight|nine").unwrap();
 
-    return lines
+    lines
         .iter()
         // split connected words
         .map(|line| {
@@ -65,8 +65,8 @@ fn challenge2(lines: &Vec<String>) -> i32 {
         // maps list of digits into a 2 digits string
         .map(|findings: Vec<String>| format!("{}{}", to_digit(&findings[0]), to_digit(findings.last().unwrap())))
         // convert from string to number
-        .map(|number_str| number_str.parse::<i32>().unwrap())
-        .sum();
+        .map(|number_str| number_str.parse::<isize>().unwrap())
+        .sum()
 }
 
 fn main() {

@@ -1,6 +1,6 @@
 use std::fs::read_to_string;
 
-pub fn print_result<T>(day: u8, challenge: u8, resolver: fn(&T) -> i32, data_test: &T, data: &T, result: i32) {
+pub fn print_result<T>(day: u8, challenge: u8, resolver: fn(&T) -> isize, data_test: &T, data: &T, result: isize) {
     println!("Testing day {day} challenge {challenge}...");
     assert_eq!(resolver(data_test), result);
     println!(

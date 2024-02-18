@@ -17,7 +17,7 @@ fn game_is_possible(runs: &str, red: &u32, green: &u32, blue: &u32) -> bool {
     })
 }
 
-fn challenge1(lines: &Vec<String>) -> i32 {
+fn challenge1(lines: &Vec<String>) -> isize {
     let red = 12u32;
     let green = 13u32;
     let blue = 14u32;
@@ -34,7 +34,7 @@ fn challenge1(lines: &Vec<String>) -> i32 {
         .sum()
 }
 
-fn get_game_power(runs: &str) -> i32 {
+fn get_game_power(runs: &str) -> isize {
     static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?<count>\d+) (?<color>red|blue|green)").unwrap());
     //TODO: split into a single run, extract how many items of each color where neded, calculate the minimum of each color of all runs of the game, multiply them.
     let (red, green, blue) = runs
@@ -43,14 +43,14 @@ fn get_game_power(runs: &str) -> i32 {
             RE.captures_iter(run)
                 .map(|cap| {
                     if &cap["color"] == "red" {
-                        return (cap["count"].parse::<i32>().unwrap(), 0, 0);
+                        return (cap["count"].parse::<isize>().unwrap(), 0, 0);
                     }
                     if &cap["color"] == "green" {
-                        return (0, cap["count"].parse::<i32>().unwrap(), 0);
+                        return (0, cap["count"].parse::<isize>().unwrap(), 0);
                     }
-                    (0, 0, cap["count"].parse::<i32>().unwrap())
+                    (0, 0, cap["count"].parse::<isize>().unwrap())
                 })
-                .fold((0, 0, 0), |cur: (i32, i32, i32), next: (i32, i32, i32)| {
+                .fold((0, 0, 0), |cur, next| {
                     (
                         if cur.0 > next.0 { cur.0 } else { next.0 },
                         if cur.1 > next.1 { cur.1 } else { next.1 },
@@ -58,7 +58,7 @@ fn get_game_power(runs: &str) -> i32 {
                     )
                 })
         })
-        .fold((0, 0, 0), |cur: (i32, i32, i32), next: (i32, i32, i32)| {
+        .fold((0, 0, 0), |cur, next| {
             (
                 if cur.0 > next.0 { cur.0 } else { next.0 },
                 if cur.1 > next.1 { cur.1 } else { next.1 },
@@ -68,7 +68,7 @@ fn get_game_power(runs: &str) -> i32 {
     red * green * blue
 }
 
-fn challenge2(lines: &Vec<String>) -> i32 {
+fn challenge2(lines: &Vec<String>) -> isize {
     lines
         .iter()
         .map(|line| {
