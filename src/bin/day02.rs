@@ -79,7 +79,7 @@ fn challenge2(lines: &Vec<String>) -> isize {
 }
 
 fn main() {
-    let challenge_input = read_lines("data/2023/day2_input.txt");
+    let challenge_input = read_lines("data/2023/day02.txt");
     print_result(2, 1, challenge1, &challenge_input);
     print_result(2, 2, challenge2, &challenge_input);
 }
