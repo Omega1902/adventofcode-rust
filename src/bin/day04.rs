@@ -1,13 +1,6 @@
+use adventofcode_rust::extract_numbers;
 use adventofcode_rust::print_result;
 use adventofcode_rust::read_lines;
-use {once_cell::sync::Lazy, regex::Regex};
-
-fn extract_numbers(number_str: &str) -> Vec<usize> {
-    static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"\d+").unwrap());
-    RE.find_iter(number_str)
-        .map(|finding| finding.as_str().parse().unwrap())
-        .collect()
-}
 
 fn get_my_winning_number_count(scratchcard: &str) -> usize {
     let (winning_numbers, selected_numbers) = scratchcard.split_once(" | ").unwrap();
