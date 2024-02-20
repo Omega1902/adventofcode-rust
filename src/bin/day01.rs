@@ -1,5 +1,4 @@
-use adventofcode_rust::print_result;
-use adventofcode_rust::read_lines;
+use adventofcode_rust::{print_result, read_lines};
 use regex::Regex;
 use std::collections::HashMap;
 

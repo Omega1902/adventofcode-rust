@@ -1,6 +1,4 @@
-use adventofcode_rust::extract_numbers;
-use adventofcode_rust::print_result;
-use adventofcode_rust::read_lines;
+use adventofcode_rust::{extract_numbers, print_result, read_lines};
 use std::collections::HashMap;
 use std::usize;
 

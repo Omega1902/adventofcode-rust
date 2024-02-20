@@ -1,5 +1,4 @@
-use adventofcode_rust::print_result;
-use adventofcode_rust::read_lines;
+use adventofcode_rust::{print_result, read_lines};
 use {once_cell::sync::Lazy, regex::Regex};
 
 fn game_is_possible(runs: &str, red: &u32, green: &u32, blue: &u32) -> bool {

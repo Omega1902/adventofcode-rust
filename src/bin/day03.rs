@@ -1,5 +1,4 @@
-use adventofcode_rust::print_result;
-use adventofcode_rust::read_lines;
+use adventofcode_rust::{print_result, read_lines};
 
 const IGNORE_CHAR: &str = ".";
 const NUMBERS: [&str; 10] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
