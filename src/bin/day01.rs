@@ -70,9 +70,37 @@ fn challenge2(lines: &Vec<String>) -> isize {
 }
 
 fn main() {
-    let challenge1_ex = read_lines("data/2023/day1_example_input.txt");
     let challenge = read_lines("data/2023/day1_input.txt");
-    print_result(1, 1, challenge1, &challenge1_ex, &challenge, 142);
-    let challenge2_ex = read_lines("data/2023/day1_example_input2.txt");
-    print_result(1, 2, challenge2, &challenge2_ex, &challenge, 281);
+    print_result(1, 1, challenge1, &challenge);
+    print_result(1, 2, challenge2, &challenge);
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use adventofcode_rust::to_lines;
+
+    const EXAMPLE_INPUT1: &str = "\
+1abc2
+pqr3stu8vwx
+a1b2c3d4e5f
+treb7uchet";
+    const EXAMPLE_INPUT2: &str = "\
+two1nine
+eightwothree
+abcone2threexyz
+xtwone3four
+4nineeightseven2
+zoneight234
+7pqrstsixteen";
+
+    #[test]
+    fn test_challenge1() {
+        assert_eq!(challenge1(&to_lines(EXAMPLE_INPUT1)), 142);
+    }
+
+    #[test]
+    fn test_challenge2() {
+        assert_eq!(challenge2(&to_lines(EXAMPLE_INPUT2)), 281);
+    }
 }

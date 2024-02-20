@@ -1,18 +1,13 @@
 use std::fs::read_to_string;
 
-pub fn print_result<T>(day: u8, challenge: u8, resolver: fn(&T) -> isize, data_test: &T, data: &T, result: isize) {
-    println!("Testing day {day} challenge {challenge}...");
-    assert_eq!(resolver(data_test), result);
-    println!(
-        "Seems to work fine. Result for day {day} challenge {challenge}: {}",
-        resolver(data)
-    );
+pub fn print_result<T>(day: u8, challenge: u8, resolver: fn(&T) -> isize, data: &T) {
+    println!("Result for day {day} challenge {challenge}: {}", resolver(data));
 }
 
 pub fn read_lines(filename: &str) -> Vec<String> {
-    read_to_string(filename)
-        .unwrap() // panic on possible file-reading errors
-        .lines() // split the string into an iterator of string slices
-        .map(String::from) // make each slice into a string
-        .collect() // gather them together into a vector
+    to_lines(&read_to_string(filename).unwrap())
+}
+
+pub fn to_lines(content: &str) -> Vec<String> {
+    content.lines().map(String::from).collect()
 }
