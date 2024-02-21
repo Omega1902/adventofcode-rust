@@ -4,18 +4,18 @@ use std::iter::zip;
 fn calc_winning_sum(time: usize, distance_threshold: usize) -> isize {
     let is_even = time % 2 == 0;
     let calculate_to = if is_even { time / 2 } else { (time - 1) / 2 };
-    let mut winning: isize = 0;
     for i in 1..=calculate_to {
         let distance = (time - i) * i;
         if distance > distance_threshold {
-            if !is_even || i < calculate_to {
-                winning += 2;
+            let score: isize = (calculate_to - i + 1) as isize * 2;
+            if is_even {
+                return score - 1;
             } else {
-                winning += 1;
+                return score;
             }
         }
     }
-    winning
+    0
 }
 
 fn challenge1(lines: &Vec<String>) -> isize {
