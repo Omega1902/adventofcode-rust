@@ -1,11 +1,37 @@
-use adventofcode_rust::{print_result, read_lines};
+use adventofcode_rust::{extract_numbers, print_result, read_lines};
+use std::iter::zip;
+
+fn calc_winning_sum(time: usize, distance_threshold: usize) -> isize {
+    let is_even = time % 2 == 0;
+    let calculate_to = if is_even { time / 2 } else { (time - 1) / 2 };
+    let mut winning: isize = 0;
+    for i in 1..=calculate_to {
+        let distance = (time - i) * i;
+        if distance > distance_threshold {
+            if !is_even || i < calculate_to {
+                winning += 2;
+            } else {
+                winning += 1;
+            }
+        }
+    }
+    winning
+}
 
 fn challenge1(lines: &Vec<String>) -> isize {
-    0
+    let times = extract_numbers(&lines[0]);
+    let distances_threshold = extract_numbers(&lines[1]);
+    zip(times, distances_threshold)
+        .map(|(time, distance_threshold)| calc_winning_sum(time, distance_threshold))
+        .product()
 }
 
 fn challenge2(lines: &Vec<String>) -> isize {
-    0
+    let times = extract_numbers(&lines[0].replace(" ", ""));
+    let distances_threshold = extract_numbers(&lines[1].replace(" ", ""));
+    zip(times, distances_threshold)
+        .map(|(time, distance_threshold)| calc_winning_sum(time, distance_threshold))
+        .product()
 }
 
 fn main() {
@@ -29,8 +55,7 @@ Distance:  9  40  200";
     }
 
     #[test]
-    #[ignore]
     fn test_challenge2() {
-        assert_eq!(challenge2(&to_lines(EXAMPLE_INPUT)), 467835);
+        assert_eq!(challenge2(&to_lines(EXAMPLE_INPUT)), 71503);
     }
 }
