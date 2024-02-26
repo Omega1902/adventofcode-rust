@@ -1,7 +1,24 @@
 use std::fs::read_to_string;
 use {once_cell::sync::Lazy, regex::Regex};
 
-pub fn extract_numbers(number_str: &str) -> Vec<usize> {
+pub fn pairwise<I>(iter: I) -> impl Iterator<Item = (I::Item, I::Item)>
+where
+    I: IntoIterator + Clone,
+{
+    // pairwise([1,2,3,4,5]) -> (1,2) (2,3) (3,4) (4,5)
+    let mut right = iter.clone().into_iter();
+    right.next();
+    iter.into_iter().zip(right)
+}
+
+pub fn extract_numbers(number_str: &str) -> Vec<isize> {
+    static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"-?\d+").unwrap());
+    RE.find_iter(number_str)
+        .map(|finding| finding.as_str().parse().unwrap())
+        .collect()
+}
+
+pub fn extract_pos_numbers(number_str: &str) -> Vec<usize> {
     static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"\d+").unwrap());
     RE.find_iter(number_str)
         .map(|finding| finding.as_str().parse().unwrap())
@@ -18,4 +35,36 @@ pub fn read_lines(filename: &str) -> Vec<String> {
 
 pub fn to_lines(content: &str) -> Vec<String> {
     content.lines().map(String::from).collect()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_pairwise() {
+        let pairwise_vec: Vec<(i8, i8)> = pairwise([1i8, 2i8, 3i8, 4i8, 5i8]).collect();
+        assert_eq!(pairwise_vec, vec![(1i8, 2i8), (2i8, 3i8), (3i8, 4i8), (4i8, 5i8)]);
+        let pairwise_vec: Vec<(i8, i8)> = pairwise([1i8]).collect();
+        assert_eq!(pairwise_vec, vec![]);
+        let pairwise_vec: Vec<(i8, i8)> = pairwise([]).collect();
+        assert_eq!(pairwise_vec, vec![]);
+        let pairwise_vec: Vec<(char, char)> = pairwise(['A', 'B', 'C', 'D', 'E']).collect();
+        assert_eq!(pairwise_vec, vec![('A', 'B'), ('B', 'C'), ('C', 'D'), ('D', 'E')]);
+    }
+
+    const EXAMPLE_INPUT1: &str = "0 3 9 12 145";
+    const EXAMPLE_INPUT2: &str = "0 3 9 12 -145";
+
+    #[test]
+    fn test_extract_pos_numbers() {
+        assert_eq!(extract_pos_numbers(EXAMPLE_INPUT1), vec![0, 3, 9, 12, 145]);
+        assert_eq!(extract_pos_numbers(EXAMPLE_INPUT2), vec![0, 3, 9, 12, 145]);
+    }
+
+    #[test]
+    fn test_extract_numbers() {
+        assert_eq!(extract_numbers(EXAMPLE_INPUT1), vec![0, 3, 9, 12, 145]);
+        assert_eq!(extract_numbers(EXAMPLE_INPUT2), vec![0, 3, 9, 12, -145]);
+    }
 }

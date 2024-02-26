@@ -1,9 +1,9 @@
-use adventofcode_rust::{extract_numbers, print_result, read_lines};
+use adventofcode_rust::{extract_pos_numbers, print_result, read_lines};
 
 fn get_my_winning_number_count(scratchcard: &str) -> usize {
     let (winning_numbers, selected_numbers) = scratchcard.split_once(" | ").unwrap();
-    let winners = extract_numbers(winning_numbers);
-    let selecteds = extract_numbers(selected_numbers);
+    let winners = extract_pos_numbers(winning_numbers);
+    let selecteds = extract_pos_numbers(selected_numbers);
     selecteds.iter().filter(|selected| winners.contains(selected)).count()
 }
 
@@ -29,7 +29,7 @@ fn challenge2(lines: &Vec<String>) -> isize {
         .map(|line| line.split_once(": ").unwrap())
         .map(|(card_label, card_content)| {
             (
-                extract_numbers(card_label)[0],
+                extract_pos_numbers(card_label)[0],
                 get_my_winning_number_count(card_content),
             )
         })

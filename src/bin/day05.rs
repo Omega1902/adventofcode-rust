@@ -1,4 +1,4 @@
-use adventofcode_rust::{extract_numbers, print_result, read_lines};
+use adventofcode_rust::{extract_pos_numbers, print_result, read_lines};
 use std::collections::HashMap;
 use std::usize;
 
@@ -10,7 +10,7 @@ fn parse_input(lines: &Vec<String>) -> (Vec<usize>, HashMap<&str, Vec<Vec<usize>
     for block_lines in blocks {
         if block_lines[0].starts_with("seeds: ") {
             for line in block_lines {
-                seeds.append(&mut extract_numbers(line))
+                seeds.append(&mut extract_pos_numbers(line))
             }
         } else {
             let name = block_lines[0].split_once(" ").unwrap().0;
@@ -18,7 +18,7 @@ fn parse_input(lines: &Vec<String>) -> (Vec<usize>, HashMap<&str, Vec<Vec<usize>
                 name,
                 block_lines
                     .iter()
-                    .map(|line| extract_numbers(line))
+                    .map(|line| extract_pos_numbers(line))
                     .filter(|numbers| !numbers.is_empty())
                     .collect(),
             );
