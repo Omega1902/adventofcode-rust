@@ -1,9 +1,8 @@
 use core::slice::Iter;
+use hashbrown::HashMap;
 use indicatif::{ProgressBar, ProgressStyle};
-use std::{
-    collections::{HashMap, HashSet},
-    time::Duration,
-};
+use num::Integer;
+use std::time::Duration;
 
 use adventofcode_rust::{print_result, read_lines};
 
@@ -31,6 +30,30 @@ fn walk_map<'a>(map: &'a HashMap<String, (String, String)>, start: &str, instruc
     }
 }
 
+fn find_final_node(
+    start_node: &str,
+    end_node_known: bool,
+    map: &HashMap<String, (String, String)>,
+    instructions: &Vec<char>,
+) -> usize {
+    let mut counter = 0;
+    let mut current_node = start_node;
+    let end_node_found = if end_node_known {
+        |current_node: &str| current_node == "ZZZ"
+    } else {
+        |current_node: &str| current_node.ends_with("Z")
+    };
+    let spinner = ProgressBar::new_spinner();
+    spinner.set_style(ProgressStyle::with_template("{spinner} {human_pos}").unwrap());
+    spinner.enable_steady_tick(Duration::from_millis(200));
+    while !end_node_found(current_node) {
+        spinner.set_position(counter as u64);
+        current_node = walk_map(&map, current_node, instructions[counter % instructions.len()]);
+        counter += 1;
+    }
+    counter
+}
+
 fn challenge1(lines: &Vec<String>) -> isize {
     let mut lines_iter = lines.iter();
     let instructions: Vec<char> = lines_iter.next().unwrap().chars().collect();
@@ -38,47 +61,24 @@ fn challenge1(lines: &Vec<String>) -> isize {
 
     let map = get_map(&mut lines_iter);
 
-    let mut counter = 0;
-    let mut current_line = "AAA";
-    let mut instructions_index: usize = 0;
-    while current_line != "ZZZ" {
-        current_line = walk_map(&map, current_line, instructions[instructions_index]);
-        counter += 1;
-        instructions_index += 1;
-        instructions_index = instructions_index % instructions.len();
-    }
-    counter
+    find_final_node("AAA", true, &map, &instructions) as isize
 }
 
 fn challenge2(lines: &Vec<String>) -> isize {
+    // this implementation assumes that each individual path from **A to **Z is repeated endlessly
+    // therefore it calulates the length of all paths on its own, and then calculates the Lowest Common Multiple
     let mut lines_iter = lines.iter();
     let instructions: Vec<char> = lines_iter.next().unwrap().chars().collect();
     lines_iter.next(); // waste empty line
 
     let map = get_map(&mut lines_iter);
 
-    let mut counter = 0;
-    let mut current_lines: HashSet<&str> = map
-        .keys()
+    map.keys()
         .filter(|node| node.ends_with("A"))
         .map(|node| node.as_str())
-        .collect();
-    let mut instructions_index: usize = 0;
-    let spinner = ProgressBar::new_spinner();
-    spinner.set_style(ProgressStyle::with_template("{spinner} {human_pos}").unwrap());
-    spinner.enable_steady_tick(Duration::from_millis(200));
-    while !current_lines.iter().all(|node| node.ends_with("Z")) {
-        spinner.set_position(counter);
-        current_lines = current_lines
-            .iter()
-            .map(|current_line| walk_map(&map, current_line, instructions[instructions_index]))
-            .collect();
-        counter += 1;
-        instructions_index += 1;
-        instructions_index = instructions_index % instructions.len();
-    }
-    spinner.finish_with_message("Done");
-    counter as isize
+        .map(|start_node| find_final_node(start_node, false, &map, &instructions))
+        .reduce(|cur, next| cur.lcm(&next))
+        .unwrap() as isize
 }
 
 fn main() {
