@@ -1,13 +1,13 @@
 use adventofcode_rust::{extract_pos_numbers, print_result, read_lines};
 use std::iter::zip;
 
-fn calc_winning_sum(time: usize, distance_threshold: usize) -> isize {
+fn calc_winning_sum(time: usize, distance_threshold: usize) -> usize {
     let is_even = time % 2 == 0;
     let calculate_to = if is_even { time / 2 } else { (time - 1) / 2 };
     for i in 1..=calculate_to {
         let distance = (time - i) * i;
         if distance > distance_threshold {
-            let score: isize = (calculate_to - i + 1) as isize * 2;
+            let score: usize = (calculate_to - i + 1) * 2;
             if is_even {
                 return score - 1;
             } else {
@@ -18,7 +18,7 @@ fn calc_winning_sum(time: usize, distance_threshold: usize) -> isize {
     0
 }
 
-fn challenge1(lines: &Vec<String>) -> isize {
+fn challenge1(lines: &Vec<String>) -> usize {
     let times = extract_pos_numbers(&lines[0]);
     let distances_threshold = extract_pos_numbers(&lines[1]);
     zip(times, distances_threshold)
@@ -26,7 +26,7 @@ fn challenge1(lines: &Vec<String>) -> isize {
         .product()
 }
 
-fn challenge2(lines: &Vec<String>) -> isize {
+fn challenge2(lines: &Vec<String>) -> usize {
     let times = extract_pos_numbers(&lines[0].replace(" ", ""));
     let distances_threshold = extract_pos_numbers(&lines[1].replace(" ", ""));
     zip(times, distances_threshold)

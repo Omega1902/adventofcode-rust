@@ -11,13 +11,7 @@ fn get_map(lines: &mut Iter<'_, String>) -> HashMap<String, (String, String)> {
     for line in lines {
         let (key, values) = line.split_once(" = ").unwrap();
         let (left, right) = values.split_once(", ").unwrap();
-        map.insert(
-            key.to_owned(),
-            (
-                left.trim_start_matches("(").to_owned(),
-                right.trim_end_matches(")").to_owned(),
-            ),
-        );
+        map.insert(key.to_owned(), (left.trim_start_matches("(").to_owned(), right.trim_end_matches(")").to_owned()));
     }
     map
 }
@@ -54,17 +48,17 @@ fn find_final_node(
     counter
 }
 
-fn challenge1(lines: &Vec<String>) -> isize {
+fn challenge1(lines: &Vec<String>) -> usize {
     let mut lines_iter = lines.iter();
     let instructions: Vec<char> = lines_iter.next().unwrap().chars().collect();
     lines_iter.next(); // waste empty line
 
     let map = get_map(&mut lines_iter);
 
-    find_final_node("AAA", true, &map, &instructions) as isize
+    find_final_node("AAA", true, &map, &instructions)
 }
 
-fn challenge2(lines: &Vec<String>) -> isize {
+fn challenge2(lines: &Vec<String>) -> usize {
     // this implementation assumes that each individual path from **A to **Z is repeated endlessly
     // therefore it calulates the length of all paths on its own, and then calculates the Lowest Common Multiple
     let mut lines_iter = lines.iter();
@@ -78,7 +72,7 @@ fn challenge2(lines: &Vec<String>) -> isize {
         .map(|node| node.as_str())
         .map(|start_node| find_final_node(start_node, false, &map, &instructions))
         .reduce(|cur, next| cur.lcm(&next))
-        .unwrap() as isize
+        .unwrap()
 }
 
 fn main() {

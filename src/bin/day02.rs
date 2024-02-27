@@ -16,7 +16,7 @@ fn game_is_possible(runs: &str, red: &u32, green: &u32, blue: &u32) -> bool {
     })
 }
 
-fn challenge1(lines: &Vec<String>) -> isize {
+fn challenge1(lines: &Vec<String>) -> usize {
     let red = 12u32;
     let green = 13u32;
     let blue = 14u32;
@@ -33,7 +33,7 @@ fn challenge1(lines: &Vec<String>) -> isize {
         .sum()
 }
 
-fn get_game_power(runs: &str) -> isize {
+fn get_game_power(runs: &str) -> usize {
     static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?<count>\d+) (?<color>red|blue|green)").unwrap());
     //TODO: split into a single run, extract how many items of each color where neded, calculate the minimum of each color of all runs of the game, multiply them.
     let (red, green, blue) = runs
@@ -42,12 +42,12 @@ fn get_game_power(runs: &str) -> isize {
             RE.captures_iter(run)
                 .map(|cap| {
                     if &cap["color"] == "red" {
-                        return (cap["count"].parse::<isize>().unwrap(), 0, 0);
+                        return (cap["count"].parse::<usize>().unwrap(), 0, 0);
                     }
                     if &cap["color"] == "green" {
-                        return (0, cap["count"].parse::<isize>().unwrap(), 0);
+                        return (0, cap["count"].parse::<usize>().unwrap(), 0);
                     }
-                    (0, 0, cap["count"].parse::<isize>().unwrap())
+                    (0, 0, cap["count"].parse::<usize>().unwrap())
                 })
                 .fold((0, 0, 0), |cur, next| {
                     (
@@ -67,7 +67,7 @@ fn get_game_power(runs: &str) -> isize {
     red * green * blue
 }
 
-fn challenge2(lines: &Vec<String>) -> isize {
+fn challenge2(lines: &Vec<String>) -> usize {
     lines
         .iter()
         .map(|line| {

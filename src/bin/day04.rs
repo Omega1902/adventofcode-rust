@@ -7,31 +7,22 @@ fn get_my_winning_number_count(scratchcard: &str) -> usize {
     selecteds.iter().filter(|selected| winners.contains(selected)).count()
 }
 
-fn challenge1(lines: &Vec<String>) -> isize {
+fn challenge1(lines: &Vec<String>) -> usize {
     lines
         .iter()
         .map(|line| line.split_once(": ").unwrap().1)
         .map(get_my_winning_number_count)
-        .map(|my_winning_numbers| {
-            if my_winning_numbers == 0 {
-                0
-            } else {
-                2isize.pow((my_winning_numbers - 1) as u32)
-            }
-        })
+        .map(|my_winning_numbers| if my_winning_numbers == 0 { 0 } else { 2usize.pow((my_winning_numbers - 1) as u32) })
         .sum()
 }
 
-fn challenge2(lines: &Vec<String>) -> isize {
-    let mut instances = vec![1isize; lines.len() + 1];
+fn challenge2(lines: &Vec<String>) -> usize {
+    let mut instances = vec![1usize; lines.len() + 1];
     lines
         .iter()
         .map(|line| line.split_once(": ").unwrap())
         .map(|(card_label, card_content)| {
-            (
-                extract_pos_numbers(card_label)[0],
-                get_my_winning_number_count(card_content),
-            )
+            (extract_pos_numbers(card_label)[0], get_my_winning_number_count(card_content))
         })
         .map(|(card_index, my_winning_cards)| {
             let own_value = instances[card_index];

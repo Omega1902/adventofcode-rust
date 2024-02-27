@@ -99,10 +99,7 @@ fn calc_location_from_seeds(seeds: Vec<usize>, map: &HashMap<&str, Vec<Vec<usize
     while find != "location" {
         let current_key = map.keys().filter(|key| key.starts_with(find)).collect::<Vec<_>>()[0];
         let current_map = map.get(current_key).unwrap();
-        indexes = indexes
-            .iter()
-            .map(|old_index| lookup_index(*old_index, current_map))
-            .collect();
+        indexes = indexes.iter().map(|old_index| lookup_index(*old_index, current_map)).collect();
         find = current_key.split_once("-to-").unwrap().1;
     }
     indexes
@@ -128,22 +125,16 @@ fn calc_location_from_seed_ranges(
     indexes
 }
 
-fn challenge1(lines: &Vec<String>) -> isize {
+fn challenge1(lines: &Vec<String>) -> usize {
     let (seeds, map) = parse_input(lines);
-    *calc_location_from_seeds(seeds, &map).iter().min().unwrap() as isize
+    *calc_location_from_seeds(seeds, &map).iter().min().unwrap()
 }
 
-fn challenge2(lines: &Vec<String>) -> isize {
+fn challenge2(lines: &Vec<String>) -> usize {
     let (seeds, map) = parse_input(lines);
-    let seeds_transformed: Vec<(usize, usize)> = seeds
-        .chunks(2)
-        .map(|range| (range[0], range[0] + range[1] - 1))
-        .collect();
-    calc_location_from_seed_ranges(seeds_transformed, &map)
-        .iter()
-        .map(|range| range.0)
-        .min()
-        .unwrap() as isize
+    let seeds_transformed: Vec<(usize, usize)> =
+        seeds.chunks(2).map(|range| (range[0], range[0] + range[1] - 1)).collect();
+    calc_location_from_seed_ranges(seeds_transformed, &map).iter().map(|range| range.0).min().unwrap()
 }
 
 fn main() {
@@ -197,13 +188,7 @@ humidity-to-location map:
         let seeds: Vec<usize> = vec![79, 14, 55, 13];
         let map: Vec<Vec<usize>> = vec![vec![50, 98, 2], vec![52, 50, 48]];
         let soil: Vec<usize> = vec![81, 14, 57, 13];
-        assert_eq!(
-            seeds
-                .iter()
-                .map(|seed| lookup_index(*seed, &map))
-                .collect::<Vec<usize>>(),
-            soil
-        )
+        assert_eq!(seeds.iter().map(|seed| lookup_index(*seed, &map)).collect::<Vec<usize>>(), soil)
     }
 
     #[test]

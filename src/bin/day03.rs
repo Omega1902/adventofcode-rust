@@ -39,15 +39,11 @@ fn get_number(index: usize, line: &str, previous_line: Option<&String>, next_lin
     }
 }
 
-fn challenge1(lines: &Vec<String>) -> isize {
-    let mut sum: isize = 0;
+fn challenge1(lines: &Vec<String>) -> usize {
+    let mut sum: usize = 0;
     for (line_number, line) in lines.iter().enumerate() {
         let mut index: usize = 0;
-        let prev_line = if line_number == 0 {
-            None
-        } else {
-            lines.get(line_number - 1)
-        };
+        let prev_line = if line_number == 0 { None } else { lines.get(line_number - 1) };
         let next_line = lines.get(line_number + 1);
         while let Some(next_word) = find_next_number(line.split_at(index).1) {
             let word_start = index + next_word;
@@ -59,11 +55,7 @@ fn challenge1(lines: &Vec<String>) -> isize {
                     || check_line_at(word_start - 1, next_line);
             }
             if mark || previous_marked {
-                sum += line
-                    .get(word_start..word_start + length)
-                    .unwrap()
-                    .parse::<isize>()
-                    .unwrap();
+                sum += line.get(word_start..word_start + length).unwrap().parse::<usize>().unwrap();
             }
             index = word_start + length;
         }
@@ -106,7 +98,7 @@ fn get_number_count(row_findings: &Vec<usize>) -> usize {
     }
 }
 
-fn get_full_number(index: usize, line: &str) -> isize {
+fn get_full_number(index: usize, line: &str) -> usize {
     let mut end = index + 1; // non-inclusive
     while let Some(c) = line.get(end..end + 1) {
         if !NUMBERS.contains(&c) {
@@ -127,7 +119,7 @@ fn get_full_number(index: usize, line: &str) -> isize {
     line.get(start..end).unwrap().parse().unwrap()
 }
 
-fn get_full_numbers_of_vec(numbers: &Vec<usize>, line: Option<&String>) -> isize {
+fn get_full_numbers_of_vec(numbers: &Vec<usize>, line: Option<&String>) -> usize {
     if numbers.is_empty() {
         return 1;
     }
@@ -138,7 +130,7 @@ fn get_full_numbers_of_vec(numbers: &Vec<usize>, line: Option<&String>) -> isize
     }
 }
 
-fn get_gear_value(index: usize, line: &str, prev_line: Option<&String>, next_line: Option<&String>) -> isize {
+fn get_gear_value(index: usize, line: &str, prev_line: Option<&String>, next_line: Option<&String>) -> usize {
     let top: Vec<usize> = get_numbers_on_index(index, prev_line);
     let mut left: Option<usize> = None;
     let mut right: Option<usize> = None;
@@ -163,7 +155,7 @@ fn get_gear_value(index: usize, line: &str, prev_line: Option<&String>, next_lin
     }
 
     // find the complete surrounding numbers
-    let mut product: isize = 1;
+    let mut product: usize = 1;
     if left.is_some() {
         product *= get_full_number(left.unwrap(), line);
     }
@@ -176,15 +168,11 @@ fn get_gear_value(index: usize, line: &str, prev_line: Option<&String>, next_lin
     product
 }
 
-fn challenge2(lines: &Vec<String>) -> isize {
+fn challenge2(lines: &Vec<String>) -> usize {
     // sum the product of all gear numbers
-    let mut sum: isize = 0;
+    let mut sum: usize = 0;
     for (line_number, line) in lines.iter().enumerate() {
-        let prev_line = if line_number == 0 {
-            None
-        } else {
-            lines.get(line_number - 1)
-        };
+        let prev_line = if line_number == 0 { None } else { lines.get(line_number - 1) };
         let next_line = lines.get(line_number + 1);
         let mut index: usize = 0;
         let mut remaining_line = line.get(index..).unwrap();

@@ -147,24 +147,24 @@ fn compare_hands_joker(hand1: &String, hand2: &String) -> Ordering {
     Ordering::Equal
 }
 
-fn challenge1(lines: &Vec<String>) -> isize {
+fn challenge1(lines: &Vec<String>) -> usize {
     let mut sortable_lines = lines.clone();
     sortable_lines.sort_by(compare_hands);
     sortable_lines
         .iter()
         .enumerate()
         .map(|(i, line)| line.split_at(6).1.parse::<usize>().unwrap() * (i + 1))
-        .sum::<usize>() as isize
+        .sum::<usize>()
 }
 
-fn challenge2(lines: &Vec<String>) -> isize {
+fn challenge2(lines: &Vec<String>) -> usize {
     let mut sortable_lines = lines.clone();
     sortable_lines.sort_by(compare_hands_joker);
     sortable_lines
         .iter()
         .enumerate()
         .map(|(i, line)| line.split_at(6).1.parse::<usize>().unwrap() * (i + 1))
-        .sum::<usize>() as isize
+        .sum::<usize>()
 }
 
 fn main() {
