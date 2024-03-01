@@ -7,7 +7,7 @@ My personal goal is to get into the programming language, as I've never written 
 
 1. [Install Rust](https://www.rust-lang.org/tools/install)
 2. Clone repo or download all files
-3. Run add implemented days: ```cargo run```
+3. Run all implemented days: ```cargo run```
 4. Run specific day (e.g. day 1): ```cargo run -- 1```
 5. More information: ```cargo run -- -h```
 
