@@ -4,7 +4,7 @@ use indicatif::{ProgressBar, ProgressStyle};
 use num::Integer;
 use std::time::Duration;
 
-use adventofcode_rust::{print_result, read_lines};
+use crate::util::{print_full_result, read_lines};
 
 fn get_map(lines: &mut Iter<'_, String>) -> HashMap<String, (String, String)> {
     let mut map: HashMap<String, (String, String)> = HashMap::new();
@@ -75,16 +75,15 @@ fn challenge2(lines: &Vec<String>) -> usize {
         .unwrap()
 }
 
-fn main() {
-    let input = read_lines("data/2023/day08.txt");
-    print_result(8, 1, challenge1, &input);
-    print_result(8, 2, challenge2, &input);
+pub fn main() {
+    let filename = "data/2023/day08.txt";
+    print_full_result(8, filename, read_lines, challenge1, challenge2);
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use adventofcode_rust::to_lines;
+    use crate::util::to_lines;
 
     const EXAMPLE_INPUT1: &str = "\
 RL

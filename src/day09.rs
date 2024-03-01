@@ -1,4 +1,4 @@
-use adventofcode_rust::{extract_numbers, pairwise, print_result, read_lines};
+use crate::util::{extract_numbers, pairwise, print_full_result, read_lines};
 
 fn get_missing_number(row: &Vec<i64>, history: bool) -> i64 {
     if row.iter().all(|item| item == &0) {
@@ -29,16 +29,15 @@ fn challenge2(lines: &Vec<String>) -> isize {
         .sum::<i64>() as isize
 }
 
-fn main() {
-    let input = read_lines("data/2023/day09.txt");
-    print_result(9, 1, challenge1, &input);
-    print_result(9, 2, challenge2, &input);
+pub fn main() {
+    let filename = "data/2023/day09.txt";
+    print_full_result(9, filename, read_lines, challenge1, challenge2);
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use adventofcode_rust::to_lines;
+    use crate::util::to_lines;
 
     const EXAMPLE_INPUT: &str = "\
 0 3 6 9 12 15

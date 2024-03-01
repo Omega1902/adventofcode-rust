@@ -1,4 +1,4 @@
-use adventofcode_rust::{extract_pos_numbers, print_result, read_lines};
+use crate::util::{extract_pos_numbers, print_full_result, read_lines};
 use std::collections::HashMap;
 use std::usize;
 
@@ -137,16 +137,15 @@ fn challenge2(lines: &Vec<String>) -> usize {
     calc_location_from_seed_ranges(seeds_transformed, &map).iter().map(|range| range.0).min().unwrap()
 }
 
-fn main() {
-    let input = read_lines("data/2023/day05.txt");
-    print_result(5, 1, challenge1, &input);
-    print_result(5, 2, challenge2, &input);
+pub fn main() {
+    let filename = "data/2023/day05.txt";
+    print_full_result(5, filename, read_lines, challenge1, challenge2);
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use adventofcode_rust::to_lines;
+    use crate::util::to_lines;
 
     const EXAMPLE_INPUT: &str = "\
 seeds: 79 14 55 13

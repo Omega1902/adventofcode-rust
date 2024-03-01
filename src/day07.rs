@@ -1,4 +1,4 @@
-use adventofcode_rust::{print_result, read_lines};
+use crate::util::{print_full_result, read_lines};
 use std::{cmp::Ordering, collections::HashMap, iter::zip, usize};
 
 fn get_rank(card: &char) -> u8 {
@@ -167,16 +167,15 @@ fn challenge2(lines: &Vec<String>) -> usize {
         .sum::<usize>()
 }
 
-fn main() {
-    let input = read_lines("data/2023/day07.txt");
-    print_result(7, 1, challenge1, &input);
-    print_result(7, 2, challenge2, &input);
+pub fn main() {
+    let filename = "data/2023/day07.txt";
+    print_full_result(7, filename, read_lines, challenge1, challenge2);
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use adventofcode_rust::to_lines;
+    use crate::util::to_lines;
 
     const EXAMPLE_INPUT: &str = "\
 32T3K 765

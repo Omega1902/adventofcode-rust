@@ -1,4 +1,4 @@
-use adventofcode_rust::{extract_pos_numbers, print_result, read_lines};
+use crate::util::{extract_pos_numbers, print_full_result, read_lines};
 
 fn get_my_winning_number_count(scratchcard: &str) -> usize {
     let (winning_numbers, selected_numbers) = scratchcard.split_once(" | ").unwrap();
@@ -36,16 +36,15 @@ fn challenge2(lines: &Vec<String>) -> usize {
         .sum()
 }
 
-fn main() {
-    let input = read_lines("data/2023/day04.txt");
-    print_result(4, 1, challenge1, &input);
-    print_result(4, 2, challenge2, &input);
+pub fn main() {
+    let filename = "data/2023/day04.txt";
+    print_full_result(4, filename, read_lines, challenge1, challenge2);
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use adventofcode_rust::to_lines;
+    use crate::util::to_lines;
 
     const EXAMPLE_INPUT: &str = "\
 Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53

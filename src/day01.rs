@@ -1,4 +1,4 @@
-use adventofcode_rust::{print_result, read_lines};
+use crate::util::{print_full_result, read_lines};
 use regex::Regex;
 use std::collections::HashMap;
 
@@ -58,16 +58,15 @@ fn challenge2(lines: &Vec<String>) -> usize {
         .sum()
 }
 
-fn main() {
-    let challenge = read_lines("data/2023/day01.txt");
-    print_result(1, 1, challenge1, &challenge);
-    print_result(1, 2, challenge2, &challenge);
+pub fn main() {
+    let filename = "data/2023/day01.txt";
+    print_full_result(1, filename, read_lines, challenge1, challenge2);
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use adventofcode_rust::to_lines;
+    use crate::util::to_lines;
 
     const EXAMPLE_INPUT1: &str = "\
 1abc2

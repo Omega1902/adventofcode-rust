@@ -1,4 +1,4 @@
-use adventofcode_rust::{print_result, read_chars};
+use crate::util::{print_full_result, read_chars};
 use hashbrown::HashSet;
 
 // | is a vertical pipe connecting north and south.
@@ -293,10 +293,8 @@ fn find_start_position(grid: &Vec<Vec<char>>) -> Option<Position> {
 
 fn find_start_pipe(grid: &Vec<Vec<char>>, start: Position, max_pos: &Position) -> PipeType {
     fn get_pipe_at(grid: &Vec<Vec<char>>, pos: Option<Position>) -> Option<PipeType> {
-        match pos {
-            Some(p) => PipeType::from_char(&grid[p.row][p.col]),
-            None => None,
-        }
+        let p = pos?;
+        PipeType::from_char(&grid[p.row][p.col])
     }
     let north = get_pipe_at(grid, start.get_position_in_bounds(Direction::North, max_pos));
     let east = get_pipe_at(grid, start.get_position_in_bounds(Direction::East, max_pos));
@@ -477,7 +475,7 @@ fn print_grid(grid: &Vec<Vec<char>>, path: &HashSet<Position>, clusters: &Vec<Cl
     }
 }
 
-fn challenge2(grid: &Vec<Vec<char>>) -> usize {
+fn challenge2(verbose: bool, grid: &Vec<Vec<char>>) -> usize {
     let max_pos = Position { row: grid.len() - 1, col: grid[0].len() - 1 };
     let start = find_start_position(grid).expect("Could not find start position");
     let start_pipe = find_start_pipe(grid, start, &max_pos);
@@ -485,21 +483,22 @@ fn challenge2(grid: &Vec<Vec<char>>) -> usize {
     adjusted_grid[start.row][start.col] = start_pipe.to_char();
     let path = find_marked_positions(grid, start, &start_pipe.to_char());
     let clusters = get_clusters(&adjusted_grid, &path, &max_pos);
-    print_grid(&adjusted_grid, &path, &clusters);
+    if verbose {
+        print_grid(&adjusted_grid, &path, &clusters);
+    }
     clusters.iter().filter(|cluster| !cluster.is_outside).map(|cluster| cluster.positions.len()).sum()
-    // 592 is too high
 }
 
-fn main() {
-    let input: Vec<Vec<char>> = read_chars("data/2023/day10.txt");
-    print_result(10, 1, challenge1, &input);
-    print_result(10, 2, challenge2, &input);
+pub fn main(verbose: bool) {
+    let filename = "data/2023/day10.txt";
+    let test = |verb| move |grid: &_| challenge2(verb, grid);
+    print_full_result(10, filename, read_chars, challenge1, test(verbose));
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use adventofcode_rust::to_chars;
+    use crate::util::to_chars;
 
     const CHALLENGE1_EXAMPLE1: &str = "\
 .....
@@ -579,13 +578,13 @@ L7JLJL-JLJLJL--JLJ.L";
 
     #[test]
     fn test_challenge2_without_squeezing() {
-        assert_eq!(challenge2(&to_chars(CHALLENGE2_EXAMPLE1)), 4);
+        assert_eq!(challenge2(true, &to_chars(CHALLENGE2_EXAMPLE1)), 4);
     }
 
     #[test]
     fn test_challenge2_with_squeezing() {
-        assert_eq!(challenge2(&to_chars(CHALLENGE2_EXAMPLE2)), 4);
-        assert_eq!(challenge2(&to_chars(CHALLENGE2_EXAMPLE3)), 8);
-        assert_eq!(challenge2(&to_chars(CHALLENGE2_EXAMPLE4)), 10);
+        assert_eq!(challenge2(true, &to_chars(CHALLENGE2_EXAMPLE2)), 4);
+        assert_eq!(challenge2(true, &to_chars(CHALLENGE2_EXAMPLE3)), 8);
+        assert_eq!(challenge2(true, &to_chars(CHALLENGE2_EXAMPLE4)), 10);
     }
 }

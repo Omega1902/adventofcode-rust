@@ -1,4 +1,4 @@
-use adventofcode_rust::{print_result, read_lines};
+use crate::util::{print_full_result, read_lines};
 
 const IGNORE_CHAR: &str = ".";
 const NUMBERS: [&str; 10] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
@@ -186,16 +186,15 @@ fn challenge2(lines: &Vec<String>) -> usize {
     sum
 }
 
-fn main() {
-    let input = read_lines("data/2023/day03.txt");
-    print_result(3, 1, challenge1, &input);
-    print_result(3, 2, challenge2, &input);
+pub fn main() {
+    let filename = "data/2023/day03.txt";
+    print_full_result(3, filename, read_lines, challenge1, challenge2)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use adventofcode_rust::to_lines;
+    use crate::util::to_lines;
 
     const EXAMPLE_INPUT: &str = "\
 467..114..

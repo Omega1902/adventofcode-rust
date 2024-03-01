@@ -1,4 +1,4 @@
-use adventofcode_rust::{print_result, read_lines};
+use crate::util::{print_full_result, read_lines};
 use {once_cell::sync::Lazy, regex::Regex};
 
 fn game_is_possible(runs: &str, red: &u32, green: &u32, blue: &u32) -> bool {
@@ -78,16 +78,15 @@ fn challenge2(lines: &Vec<String>) -> usize {
         .sum()
 }
 
-fn main() {
-    let challenge_input = read_lines("data/2023/day02.txt");
-    print_result(2, 1, challenge1, &challenge_input);
-    print_result(2, 2, challenge2, &challenge_input);
+pub fn main() {
+    let filename = "data/2023/day02.txt";
+    print_full_result(2, filename, read_lines, challenge1, challenge2)
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use adventofcode_rust::to_lines;
+    use crate::util::to_lines;
 
     const EXAMPLE_INPUT: &str = "\
 Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green

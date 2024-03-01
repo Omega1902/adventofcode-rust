@@ -1,4 +1,4 @@
-use adventofcode_rust::{extract_pos_numbers, print_result, read_lines};
+use crate::util::{extract_pos_numbers, print_full_result, read_lines};
 use std::iter::zip;
 
 fn calc_winning_sum(time: usize, distance_threshold: usize) -> usize {
@@ -34,16 +34,15 @@ fn challenge2(lines: &Vec<String>) -> usize {
         .product()
 }
 
-fn main() {
-    let input = read_lines("data/2023/day06.txt");
-    print_result(6, 1, challenge1, &input);
-    print_result(6, 2, challenge2, &input);
+pub fn main() {
+    let filename = "data/2023/day06.txt";
+    print_full_result(6, filename, read_lines, challenge1, challenge2);
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use adventofcode_rust::to_lines;
+    use crate::util::to_lines;
 
     const EXAMPLE_INPUT: &str = "\
 Time:      7  15   30
