@@ -21,13 +21,14 @@ fn run_day(day: u8, verbose: bool) {
         8 => adventofcode_rust::day08::main(),
         9 => adventofcode_rust::day09::main(),
         10 => adventofcode_rust::day10::main(verbose),
+        11 => adventofcode_rust::day11::main(),
         i => println!("Day {i} is not (yet) available"),
     }
 }
 
 fn main() {
     let args = Args::parse();
-    let max_day = 10;
+    let max_day = 11;
     match args.day {
         None => {
             for day in 1..=max_day {
