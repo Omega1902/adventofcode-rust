@@ -43,13 +43,13 @@ enum PipeType {
 
 impl PipeType {
     fn from_char(item: &char) -> Option<PipeType> {
-        match item {
-            &'|' => Some(PipeType::Vertical),
-            &'-' => Some(PipeType::Horizontal),
-            &'L' => Some(PipeType::BotLeft),
-            &'F' => Some(PipeType::TopLeft),
-            &'J' => Some(PipeType::BotRight),
-            &'7' => Some(PipeType::TopRight),
+        match *item {
+            '|' => Some(PipeType::Vertical),
+            '-' => Some(PipeType::Horizontal),
+            'L' => Some(PipeType::BotLeft),
+            'F' => Some(PipeType::TopLeft),
+            'J' => Some(PipeType::BotRight),
+            '7' => Some(PipeType::TopRight),
             _ => None,
         }
     }
@@ -80,7 +80,7 @@ impl PipeType {
         self.get_connected_directions().contains(direction)
     }
 
-    fn to_char(&self) -> char {
+    fn get_char(&self) -> char {
         match self {
             PipeType::Horizontal => '-',
             PipeType::Vertical => '|',
@@ -91,7 +91,7 @@ impl PipeType {
         }
     }
 
-    fn to_pipechar(&self) -> char {
+    fn get_pipechar(&self) -> char {
         // ┌─┐  ╔═╗
         // │ │  ║ ║
         // └─┘  ╚═╝
@@ -256,21 +256,16 @@ impl PositionFromDirection {
         let mut result: Vec<PositionFromDirection> = vec![];
         match pipe {
             PipeType::Vertical | PipeType::Horizontal => {
-                let part_res = self.pos.get_position_in_bounds(self.direction, max_pos);
-                if part_res.is_some() {
-                    result.push(PositionFromDirection { pos: part_res.unwrap(), direction: self.direction.opposite() });
+                if let Some(part_res) = self.pos.get_position_in_bounds(self.direction, max_pos) {
+                    result.push(PositionFromDirection { pos: part_res, direction: self.direction.opposite() });
                 }
             }
             _ => {
                 let unconnected_directions = pipe.get_unconnected_directions();
                 if unconnected_directions.contains(&self.direction) {
                     for direction in unconnected_directions {
-                        let part_res = self.pos.get_position_in_bounds(direction, max_pos);
-                        if part_res.is_some() {
-                            result.push(PositionFromDirection {
-                                pos: part_res.unwrap(),
-                                direction: direction.opposite(),
-                            });
+                        if let Some(part_res) = self.pos.get_position_in_bounds(direction, max_pos) {
+                            result.push(PositionFromDirection { pos: part_res, direction: direction.opposite() });
                         }
                     }
                 }
@@ -280,7 +275,7 @@ impl PositionFromDirection {
     }
 }
 
-fn find_start_position(grid: &Vec<Vec<char>>) -> Option<Position> {
+fn find_start_position(grid: &[Vec<char>]) -> Option<Position> {
     for (row_index, row) in grid.iter().enumerate() {
         for (column_index, char) in row.iter().enumerate() {
             if char == &'S' {
@@ -291,8 +286,8 @@ fn find_start_position(grid: &Vec<Vec<char>>) -> Option<Position> {
     None
 }
 
-fn find_start_pipe(grid: &Vec<Vec<char>>, start: Position, max_pos: &Position) -> PipeType {
-    fn get_pipe_at(grid: &Vec<Vec<char>>, pos: Option<Position>) -> Option<PipeType> {
+fn find_start_pipe(grid: &[Vec<char>], start: Position, max_pos: &Position) -> PipeType {
+    fn get_pipe_at(grid: &[Vec<char>], pos: Option<Position>) -> Option<PipeType> {
         let p = pos?;
         PipeType::from_char(&grid[p.row][p.col])
     }
@@ -318,7 +313,7 @@ fn find_start_pipe(grid: &Vec<Vec<char>>, start: Position, max_pos: &Position) -
     }
 }
 
-fn get_new_position(grid: &Vec<Vec<char>>, pos: Position, marked_positions: &HashSet<Position>) -> Option<Position> {
+fn get_new_position(grid: &[Vec<char>], pos: Position, marked_positions: &HashSet<Position>) -> Option<Position> {
     let positions = pos.get_positions(&PipeType::from_char(&grid[pos.row][pos.col]).expect("Not a pipe"));
     if !marked_positions.contains(&positions[0]) {
         Some(positions[0])
@@ -329,15 +324,15 @@ fn get_new_position(grid: &Vec<Vec<char>>, pos: Position, marked_positions: &Has
     }
 }
 
-fn find_marked_positions(grid: &Vec<Vec<char>>, start: Position, start_pipe: &char) -> HashSet<Position> {
+fn find_marked_positions(grid: &[Vec<char>], start: Position, start_pipe: &char) -> HashSet<Position> {
     let mut marked_positions = HashSet::new();
     marked_positions.insert(start);
     let mut next_positions = start.get_positions(&PipeType::from_char(start_pipe).expect("not a pipe char"));
     loop {
-        for i in 0..=1 {
-            marked_positions.insert(next_positions[i]);
-            match get_new_position(grid, next_positions[i], &marked_positions) {
-                Some(pos) => next_positions[i] = pos,
+        for next_position in &mut next_positions {
+            marked_positions.insert(*next_position);
+            match get_new_position(grid, *next_position, &marked_positions) {
+                Some(pos) => *next_position = pos,
                 None => return marked_positions,
             }
         }
@@ -348,7 +343,7 @@ fn challenge1(grid: &Vec<Vec<char>>) -> usize {
     let max_pos = Position { row: grid.len() - 1, col: grid[0].len() - 1 };
     let start = find_start_position(grid).expect("Could not find start position");
     let start_pipe = find_start_pipe(grid, start, &max_pos);
-    let positions = find_marked_positions(grid, start, &start_pipe.to_char()).len();
+    let positions = find_marked_positions(grid, start, &start_pipe.get_char()).len();
     if positions % 2 == 1 {
         (positions - 1) / 2
     } else {
@@ -372,7 +367,7 @@ impl Cluster {
         self.positions.contains(pos)
     }
 
-    fn fill_cluster(&mut self, grid: &Vec<Vec<char>>, path: &HashSet<Position>, pos: Position, max_pos: &Position) {
+    fn fill_cluster(&mut self, grid: &[Vec<char>], path: &HashSet<Position>, pos: Position, max_pos: &Position) {
         self.positions.insert(pos);
 
         for direction in DIRECTIONS {
@@ -419,7 +414,7 @@ impl Cluster {
             return;
         }
         if path.contains(&pos) {
-            self.border.insert(PositionFromDirection { pos: pos, direction: from });
+            self.border.insert(PositionFromDirection { pos, direction: from });
             return;
         }
 
@@ -434,7 +429,7 @@ impl Cluster {
     }
 }
 
-fn get_clusters(grid: &Vec<Vec<char>>, path: &HashSet<Position>, max_pos: &Position) -> Vec<Cluster> {
+fn get_clusters(grid: &[Vec<char>], path: &HashSet<Position>, max_pos: &Position) -> Vec<Cluster> {
     let mut clusters: Vec<Cluster> = vec![];
     for row_id in 0..=max_pos.row {
         for col_id in 0..=max_pos.col {
@@ -443,14 +438,14 @@ fn get_clusters(grid: &Vec<Vec<char>>, path: &HashSet<Position>, max_pos: &Posit
                 continue;
             }
             let mut new_cluster = Cluster::new();
-            new_cluster.fill_cluster(grid, &path, pos, &max_pos);
+            new_cluster.fill_cluster(grid, path, pos, max_pos);
             clusters.push(new_cluster);
         }
     }
     clusters
 }
 
-fn print_grid(grid: &Vec<Vec<char>>, path: &HashSet<Position>, clusters: &Vec<Cluster>) {
+fn print_grid(grid: &[Vec<char>], path: &HashSet<Position>, clusters: &[Cluster]) {
     let mut inside_pos: HashSet<Position> = HashSet::new();
     for cluster in clusters {
         if cluster.is_outside {
@@ -466,7 +461,7 @@ fn print_grid(grid: &Vec<Vec<char>>, path: &HashSet<Position>, clusters: &Vec<Cl
             if inside_pos.contains(&pos) {
                 print!("i");
             } else if path.contains(&pos) {
-                print!("{}", PipeType::from_char(item).unwrap().to_pipechar());
+                print!("{}", PipeType::from_char(item).unwrap().get_pipechar());
             } else {
                 print!(".");
             }
@@ -479,9 +474,9 @@ fn challenge2(verbose: bool, grid: &Vec<Vec<char>>) -> usize {
     let max_pos = Position { row: grid.len() - 1, col: grid[0].len() - 1 };
     let start = find_start_position(grid).expect("Could not find start position");
     let start_pipe = find_start_pipe(grid, start, &max_pos);
-    let mut adjusted_grid = grid.clone();
-    adjusted_grid[start.row][start.col] = start_pipe.to_char();
-    let path = find_marked_positions(grid, start, &start_pipe.to_char());
+    let mut adjusted_grid = grid.to_owned();
+    adjusted_grid[start.row][start.col] = start_pipe.get_char();
+    let path = find_marked_positions(grid, start, &start_pipe.get_char());
     let clusters = get_clusters(&adjusted_grid, &path, &max_pos);
     if verbose {
         print_grid(&adjusted_grid, &path, &clusters);

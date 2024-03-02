@@ -3,7 +3,7 @@ use {once_cell::sync::Lazy, regex::Regex};
 
 fn game_is_possible(runs: &str, red: &u32, green: &u32, blue: &u32) -> bool {
     static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?<count>\d+) (?<color>red|blue|green)").unwrap());
-    runs.split(";").all(|run| {
+    runs.split(';').all(|run| {
         RE.captures_iter(run).all(|cap| {
             if &cap["color"] == "red" {
                 return cap["count"].parse::<u32>().unwrap() <= *red;
@@ -37,7 +37,7 @@ fn get_game_power(runs: &str) -> usize {
     static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?<count>\d+) (?<color>red|blue|green)").unwrap());
     //TODO: split into a single run, extract how many items of each color where neded, calculate the minimum of each color of all runs of the game, multiply them.
     let (red, green, blue) = runs
-        .split(";")
+        .split(';')
         .map(|run| {
             RE.captures_iter(run)
                 .map(|cap| {

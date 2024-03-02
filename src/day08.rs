@@ -11,7 +11,7 @@ fn get_map(lines: &mut Iter<'_, String>) -> HashMap<String, (String, String)> {
     for line in lines {
         let (key, values) = line.split_once(" = ").unwrap();
         let (left, right) = values.split_once(", ").unwrap();
-        map.insert(key.to_owned(), (left.trim_start_matches("(").to_owned(), right.trim_end_matches(")").to_owned()));
+        map.insert(key.to_owned(), (left.trim_start_matches('(').to_owned(), right.trim_end_matches(')').to_owned()));
     }
     map
 }
@@ -28,21 +28,21 @@ fn find_final_node(
     start_node: &str,
     end_node_known: bool,
     map: &HashMap<String, (String, String)>,
-    instructions: &Vec<char>,
+    instructions: &[char],
 ) -> usize {
     let mut counter = 0;
     let mut current_node = start_node;
     let end_node_found = if end_node_known {
         |current_node: &str| current_node == "ZZZ"
     } else {
-        |current_node: &str| current_node.ends_with("Z")
+        |current_node: &str| current_node.ends_with('Z')
     };
     let spinner = ProgressBar::new_spinner();
     spinner.set_style(ProgressStyle::with_template("{spinner} {human_pos}").unwrap());
     spinner.enable_steady_tick(Duration::from_millis(200));
     while !end_node_found(current_node) {
         spinner.set_position(counter as u64);
-        current_node = walk_map(&map, current_node, instructions[counter % instructions.len()]);
+        current_node = walk_map(map, current_node, instructions[counter % instructions.len()]);
         counter += 1;
     }
     counter
@@ -68,7 +68,7 @@ fn challenge2(lines: &Vec<String>) -> usize {
     let map = get_map(&mut lines_iter);
 
     map.keys()
-        .filter(|node| node.ends_with("A"))
+        .filter(|node| node.ends_with('A'))
         .map(|node| node.as_str())
         .map(|start_node| find_final_node(start_node, false, &map, &instructions))
         .reduce(|cur, next| cur.lcm(&next))

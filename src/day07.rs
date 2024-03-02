@@ -45,7 +45,7 @@ fn get_hand_rank(cards: &str) -> u8 {
         map.insert(card, *map.get(&card).unwrap_or(&0) + 1);
     }
     let values: Vec<&u8> = map.values().collect();
-    match values.iter().count() {
+    match values.len() {
         5 => 1,
         4 => 2,
         3 => {
@@ -76,7 +76,7 @@ fn get_hand_rank_joker(cards: &str) -> u8 {
     let jokers = map.remove(&'J').unwrap_or(0);
 
     let values: Vec<&u8> = map.values().collect();
-    match values.iter().count() {
+    match values.len() {
         5 => 1, // jokers would already have been reduced
         4 => 2, // covers 1 pair and high-card + 1 joker
         3 => {
@@ -148,7 +148,7 @@ fn compare_hands_joker(hand1: &String, hand2: &String) -> Ordering {
 }
 
 fn challenge1(lines: &Vec<String>) -> usize {
-    let mut sortable_lines = lines.clone();
+    let mut sortable_lines = lines.to_owned();
     sortable_lines.sort_by(compare_hands);
     sortable_lines
         .iter()
@@ -158,7 +158,7 @@ fn challenge1(lines: &Vec<String>) -> usize {
 }
 
 fn challenge2(lines: &Vec<String>) -> usize {
-    let mut sortable_lines = lines.clone();
+    let mut sortable_lines = lines.to_owned();
     sortable_lines.sort_by(compare_hands_joker);
     sortable_lines
         .iter()

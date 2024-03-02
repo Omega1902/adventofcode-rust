@@ -10,7 +10,7 @@ impl Pos {
     }
 }
 
-fn enlarge_grid(grid: &Vec<Vec<char>>) -> (Vec<usize>, Vec<usize>) {
+fn enlarge_grid(grid: &[Vec<char>]) -> (Vec<usize>, Vec<usize>) {
     let rows: Vec<usize> =
         grid.iter().enumerate().filter(|(_, row)| row.iter().all(|item| item == &'.')).map(|(i, _)| i).collect();
     let cols: Vec<usize> =
@@ -18,8 +18,8 @@ fn enlarge_grid(grid: &Vec<Vec<char>>) -> (Vec<usize>, Vec<usize>) {
     (rows, cols)
 }
 
-fn get_star_positions(grid: &Vec<Vec<char>>, enlarge: usize) -> Vec<Pos> {
-    fn add_spacing(id: usize, enlarged: &Vec<usize>, enlarge: usize) -> u64 {
+fn get_star_positions(grid: &[Vec<char>], enlarge: usize) -> Vec<Pos> {
+    fn add_spacing(id: usize, enlarged: &[usize], enlarge: usize) -> u64 {
         let mut spacing = enlarged.iter().filter(|i| i < &&id).count();
         if spacing > 0 {
             spacing *= enlarge - 1;
@@ -41,8 +41,8 @@ fn get_star_positions(grid: &Vec<Vec<char>>, enlarge: usize) -> Vec<Pos> {
     result
 }
 
-fn get_stars_distance(grid: &Vec<Vec<char>>, enlarge: usize) -> u64 {
-    let stars = get_star_positions(&grid, enlarge);
+fn get_stars_distance(grid: &[Vec<char>], enlarge: usize) -> u64 {
+    let stars = get_star_positions(grid, enlarge);
     stars.into_iter().combinations(2).map(|cur_stars| cur_stars[0].distance(&cur_stars[1])).sum()
 }
 

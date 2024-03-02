@@ -11,10 +11,7 @@ fn find_next_number(line: &str) -> Option<usize> {
     if NUMBERS.contains(&first_char) {
         return Some(0);
     }
-    match find_next_number(remaining_line) {
-        Some(i) => return Some(i + 1),
-        None => return None,
-    }
+    Some(find_next_number(remaining_line)? + 1)
 }
 
 fn check_line_at(index: usize, line: Option<&String>) -> bool {
@@ -74,10 +71,8 @@ fn get_numbers_on_index(index: usize, line: Option<&String>) -> Vec<usize> {
 
     let mut result: Vec<usize> = vec![];
     let temp_line = line.unwrap();
-    if index > 0 {
-        if is_number(index - 1, temp_line) {
-            result.push(index - 1);
-        }
+    if index > 0 && is_number(index - 1, temp_line) {
+        result.push(index - 1);
     }
     if is_number(index, temp_line) {
         result.push(index)
@@ -88,7 +83,7 @@ fn get_numbers_on_index(index: usize, line: Option<&String>) -> Vec<usize> {
     result
 }
 
-fn get_number_count(row_findings: &Vec<usize>) -> usize {
+fn get_number_count(row_findings: &[usize]) -> usize {
     if row_findings.is_empty() {
         0
     } else if row_findings.len() == 1 || row_findings.len() >= 3 || row_findings[1] - row_findings[0] == 1 {
@@ -119,7 +114,7 @@ fn get_full_number(index: usize, line: &str) -> usize {
     line.get(start..end).unwrap().parse().unwrap()
 }
 
-fn get_full_numbers_of_vec(numbers: &Vec<usize>, line: Option<&String>) -> usize {
+fn get_full_numbers_of_vec(numbers: &[usize], line: Option<&String>) -> usize {
     if numbers.is_empty() {
         return 1;
     }
@@ -176,7 +171,7 @@ fn challenge2(lines: &Vec<String>) -> usize {
         let next_line = lines.get(line_number + 1);
         let mut index: usize = 0;
         let mut remaining_line = line.get(index..).unwrap();
-        while let Some(gear) = remaining_line.find("*") {
+        while let Some(gear) = remaining_line.find('*') {
             index += gear;
             sum += get_gear_value(index, line, prev_line, next_line);
             index += 1;

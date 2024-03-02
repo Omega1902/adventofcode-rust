@@ -16,7 +16,7 @@ fn get_missing_number(row: &Vec<i64>, history: bool) -> i64 {
 fn challenge1(lines: &Vec<String>) -> isize {
     lines
         .iter()
-        .map(|line| extract_numbers(&line))
+        .map(|line| extract_numbers(line))
         .map(|row| get_missing_number(&(row.iter().map(|&item| item as i64).collect()), false))
         .sum::<i64>() as isize
 }
@@ -24,7 +24,7 @@ fn challenge1(lines: &Vec<String>) -> isize {
 fn challenge2(lines: &Vec<String>) -> isize {
     lines
         .iter()
-        .map(|line| extract_numbers(&line))
+        .map(|line| extract_numbers(line))
         .map(|row| get_missing_number(&(row.iter().map(|&item| item as i64).collect()), true))
         .sum::<i64>() as isize
 }

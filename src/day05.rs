@@ -2,10 +2,10 @@ use crate::util::{extract_pos_numbers, print_full_result, read_lines};
 use std::collections::HashMap;
 use std::usize;
 
-fn parse_input(lines: &Vec<String>) -> (Vec<usize>, HashMap<&str, Vec<Vec<usize>>>) {
+fn parse_input(lines: &[String]) -> (Vec<usize>, HashMap<&str, Vec<Vec<usize>>>) {
     let mut seeds: Vec<usize> = vec![];
     let mut map: HashMap<&str, Vec<Vec<usize>>> = HashMap::new();
-    let blocks: Vec<&[String]> = lines.split(|line| line == &"").collect();
+    let blocks: Vec<&[String]> = lines.split(|line| line == "").collect();
 
     for block_lines in blocks {
         if block_lines[0].starts_with("seeds: ") {
@@ -13,7 +13,7 @@ fn parse_input(lines: &Vec<String>) -> (Vec<usize>, HashMap<&str, Vec<Vec<usize>
                 seeds.append(&mut extract_pos_numbers(line))
             }
         } else {
-            let name = block_lines[0].split_once(" ").unwrap().0;
+            let name = block_lines[0].split_once(' ').unwrap().0;
             map.insert(
                 name,
                 block_lines
@@ -76,7 +76,7 @@ fn lookup_index_range_item(
     (transformed_ranges, remaining_ranges)
 }
 
-fn lookup_index_range(old_range: (usize, usize), map: &Vec<Vec<usize>>) -> Vec<(usize, usize)> {
+fn lookup_index_range(old_range: (usize, usize), map: &[Vec<usize>]) -> Vec<(usize, usize)> {
     let mut remaining_ranges = vec![old_range];
     let mut result: Vec<(usize, usize)> = vec![];
     for map_item in map {

@@ -27,8 +27,8 @@ fn challenge1(lines: &Vec<String>) -> usize {
 }
 
 fn challenge2(lines: &Vec<String>) -> usize {
-    let times = extract_pos_numbers(&lines[0].replace(" ", ""));
-    let distances_threshold = extract_pos_numbers(&lines[1].replace(" ", ""));
+    let times = extract_pos_numbers(&lines[0].replace(' ', ""));
+    let distances_threshold = extract_pos_numbers(&lines[1].replace(' ', ""));
     zip(times, distances_threshold)
         .map(|(time, distance_threshold)| calc_winning_sum(time, distance_threshold))
         .product()
