@@ -11,17 +11,17 @@ struct Args {
 
 fn run_day(day: u8, verbose: bool) {
     match day {
-        1 => adventofcode_rust::day01::main(),
-        2 => adventofcode_rust::day02::main(),
-        3 => adventofcode_rust::day03::main(),
-        4 => adventofcode_rust::day04::main(),
-        5 => adventofcode_rust::day05::main(),
-        6 => adventofcode_rust::day06::main(),
-        7 => adventofcode_rust::day07::main(),
-        8 => adventofcode_rust::day08::main(),
-        9 => adventofcode_rust::day09::main(),
-        10 => adventofcode_rust::day10::main(verbose),
-        11 => adventofcode_rust::day11::main(),
+        1 => adventofcode::day01::main(),
+        2 => adventofcode::day02::main(),
+        3 => adventofcode::day03::main(),
+        4 => adventofcode::day04::main(),
+        5 => adventofcode::day05::main(),
+        6 => adventofcode::day06::main(),
+        7 => adventofcode::day07::main(),
+        8 => adventofcode::day08::main(),
+        9 => adventofcode::day09::main(),
+        10 => adventofcode::day10::main(verbose),
+        11 => adventofcode::day11::main(),
         i => println!("Day {i} is not (yet) available"),
     }
 }

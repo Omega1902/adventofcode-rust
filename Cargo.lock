@@ -3,7 +3,7 @@
 version = 3
 
 [[package]]
-name = "adventofcode-rust"
+name = "adventofcode"
 version = "0.1.0"
 dependencies = [
  "clap",
