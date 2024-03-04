@@ -5,7 +5,7 @@ use std::usize;
 fn parse_input(lines: &[String]) -> (Vec<usize>, HashMap<&str, Vec<Vec<usize>>>) {
     let mut seeds: Vec<usize> = vec![];
     let mut map: HashMap<&str, Vec<Vec<usize>>> = HashMap::new();
-    let blocks: Vec<&[String]> = lines.split(|line| line == "").collect();
+    let blocks: Vec<&[String]> = lines.split(|line| line.is_empty()).collect();
 
     for block_lines in blocks {
         if block_lines[0].starts_with("seeds: ") {
