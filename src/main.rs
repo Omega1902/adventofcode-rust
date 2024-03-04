@@ -1,3 +1,4 @@
+use adventofcode::download::download_all;
 use clap::Parser;
 
 /// Advent of Code resolver for 2023
@@ -7,6 +8,9 @@ struct Args {
     /// Specify number of day to solve between 1 and 25. Default will solve all days
     #[arg(value_parser = clap::value_parser!(u8).range(1..=25))]
     day: Option<u8>,
+
+    #[arg(short, long)]
+    download: bool,
 }
 
 fn run_day(day: u8, verbose: bool) {
@@ -28,6 +32,12 @@ fn run_day(day: u8, verbose: bool) {
 
 fn main() {
     let args = Args::parse();
+
+    if args.download {
+        download_all(args.day);
+        return;
+    }
+
     let max_day = 11;
     match args.day {
         None => {

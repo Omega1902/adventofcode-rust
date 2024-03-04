@@ -1,3 +1,4 @@
 /dist
 /target
 .session
+.DS_Store
