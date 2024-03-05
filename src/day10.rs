@@ -339,7 +339,7 @@ fn find_marked_positions(grid: &[Vec<char>], start: Position, start_pipe: &char)
     }
 }
 
-fn challenge1(grid: &Vec<Vec<char>>) -> usize {
+fn challenge1(grid: &[Vec<char>]) -> usize {
     let max_pos = Position { row: grid.len() - 1, col: grid[0].len() - 1 };
     let start = find_start_position(grid).expect("Could not find start position");
     let start_pipe = find_start_pipe(grid, start, &max_pos);
@@ -470,7 +470,7 @@ fn print_grid(grid: &[Vec<char>], path: &HashSet<Position>, clusters: &[Cluster]
     }
 }
 
-fn challenge2(verbose: bool, grid: &Vec<Vec<char>>) -> usize {
+fn challenge2(verbose: bool, grid: &[Vec<char>]) -> usize {
     let max_pos = Position { row: grid.len() - 1, col: grid[0].len() - 1 };
     let start = find_start_position(grid).expect("Could not find start position");
     let start_pipe = find_start_pipe(grid, start, &max_pos);

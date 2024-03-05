@@ -2,7 +2,7 @@ use crate::util::{print_full_result, read_lines};
 use regex::Regex;
 use std::collections::HashMap;
 
-fn challenge1(lines: &Vec<String>) -> usize {
+fn challenge1(lines: &[String]) -> usize {
     let regex = Regex::new(r"\d").unwrap();
 
     lines
@@ -34,7 +34,7 @@ fn to_digit(num: &str) -> &str {
     map[num]
 }
 
-fn challenge2(lines: &Vec<String>) -> usize {
+fn challenge2(lines: &[String]) -> usize {
     let regex = Regex::new(r"\d|one|two|three|four|five|six|seven|eight|nine").unwrap();
 
     lines

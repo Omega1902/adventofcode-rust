@@ -16,7 +16,7 @@ fn game_is_possible(runs: &str, red: &u32, green: &u32, blue: &u32) -> bool {
     })
 }
 
-fn challenge1(lines: &Vec<String>) -> usize {
+fn challenge1(lines: &[String]) -> usize {
     let red = 12u32;
     let green = 13u32;
     let blue = 14u32;
@@ -67,7 +67,7 @@ fn get_game_power(runs: &str) -> usize {
     red * green * blue
 }
 
-fn challenge2(lines: &Vec<String>) -> usize {
+fn challenge2(lines: &[String]) -> usize {
     lines
         .iter()
         .map(|line| {

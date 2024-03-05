@@ -24,9 +24,9 @@ pub fn extract_pos_numbers(number_str: &str) -> Vec<usize> {
 pub fn print_full_result<T, E, I>(
     day: u8,
     filename: &str,
-    file_reader: fn(&str) -> Result<T, E>,
-    challenge1: impl Fn(&T) -> I,
-    challenge2: impl Fn(&T) -> I,
+    file_reader: fn(&str) -> Result<Vec<T>, E>,
+    challenge1: impl Fn(&[T]) -> I,
+    challenge2: impl Fn(&[T]) -> I,
 ) where
     E: std::fmt::Debug,
     I: std::fmt::Display,
@@ -41,7 +41,7 @@ pub fn print_full_result<T, E, I>(
     }
 }
 
-pub fn print_result<T, I: std::fmt::Display>(day: u8, challenge: u8, resolver: impl Fn(&T) -> I, data: &T) {
+pub fn print_result<T, I: std::fmt::Display>(day: u8, challenge: u8, resolver: impl Fn(&[T]) -> I, data: &[T]) {
     println!("Result for day {day:2} challenge {challenge}: {}", resolver(data));
 }
 

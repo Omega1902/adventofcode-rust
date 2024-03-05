@@ -10,15 +10,14 @@ fn calc_winning_sum(time: usize, distance_threshold: usize) -> usize {
             let score: usize = (calculate_to - i + 1) * 2;
             if is_even {
                 return score - 1;
-            } else {
-                return score;
             }
+            return score;
         }
     }
     0
 }
 
-fn challenge1(lines: &Vec<String>) -> usize {
+fn challenge1(lines: &[String]) -> usize {
     let times = extract_pos_numbers(&lines[0]);
     let distances_threshold = extract_pos_numbers(&lines[1]);
     zip(times, distances_threshold)
@@ -26,7 +25,7 @@ fn challenge1(lines: &Vec<String>) -> usize {
         .product()
 }
 
-fn challenge2(lines: &Vec<String>) -> usize {
+fn challenge2(lines: &[String]) -> usize {
     let times = extract_pos_numbers(&lines[0].replace(' ', ""));
     let distances_threshold = extract_pos_numbers(&lines[1].replace(' ', ""));
     zip(times, distances_threshold)

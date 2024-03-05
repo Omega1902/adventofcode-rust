@@ -7,7 +7,7 @@ fn get_my_winning_number_count(scratchcard: &str) -> usize {
     selecteds.iter().filter(|selected| winners.contains(selected)).count()
 }
 
-fn challenge1(lines: &Vec<String>) -> usize {
+fn challenge1(lines: &[String]) -> usize {
     lines
         .iter()
         .map(|line| line.split_once(": ").unwrap().1)
@@ -16,7 +16,7 @@ fn challenge1(lines: &Vec<String>) -> usize {
         .sum()
 }
 
-fn challenge2(lines: &Vec<String>) -> usize {
+fn challenge2(lines: &[String]) -> usize {
     let mut instances = vec![1usize; lines.len() + 1];
     lines
         .iter()
@@ -27,8 +27,8 @@ fn challenge2(lines: &Vec<String>) -> usize {
         .map(|(card_index, my_winning_cards)| {
             let own_value = instances[card_index];
             if my_winning_cards > 0 {
-                for i in card_index + 1..=card_index + my_winning_cards {
-                    instances[i] += own_value;
+                for instance in instances.iter_mut().take(card_index + my_winning_cards + 1).skip(card_index + 1) {
+                    *instance += own_value;
                 }
             }
             own_value

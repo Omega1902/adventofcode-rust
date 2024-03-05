@@ -48,7 +48,7 @@ fn find_final_node(
     counter
 }
 
-fn challenge1(lines: &Vec<String>) -> usize {
+fn challenge1(lines: &[String]) -> usize {
     let mut lines_iter = lines.iter();
     let instructions: Vec<char> = lines_iter.next().unwrap().chars().collect();
     lines_iter.next(); // waste empty line
@@ -58,7 +58,7 @@ fn challenge1(lines: &Vec<String>) -> usize {
     find_final_node("AAA", true, &map, &instructions)
 }
 
-fn challenge2(lines: &Vec<String>) -> usize {
+fn challenge2(lines: &[String]) -> usize {
     // this implementation assumes that each individual path from **A to **Z is repeated endlessly
     // therefore it calulates the length of all paths on its own, and then calculates the Lowest Common Multiple
     let mut lines_iter = lines.iter();

@@ -46,11 +46,11 @@ fn get_stars_distance(grid: &[Vec<char>], enlarge: usize) -> u64 {
     stars.into_iter().combinations(2).map(|cur_stars| cur_stars[0].distance(&cur_stars[1])).sum()
 }
 
-fn challenge1(grid: &Vec<Vec<char>>) -> u64 {
+fn challenge1(grid: &[Vec<char>]) -> u64 {
     get_stars_distance(grid, 2)
 }
 
-fn challenge2(grid: &Vec<Vec<char>>) -> u64 {
+fn challenge2(grid: &[Vec<char>]) -> u64 {
     get_stars_distance(grid, 1_000_000)
 }
 

@@ -41,14 +41,10 @@ fn add_numbers(operand1: usize, operand2: isize) -> usize {
     (operand1 as isize + operand2) as usize
 }
 
-fn lookup_index_range_item(
-    ranges: Vec<(usize, usize)>,
-    start: usize,
-    end: usize,
-    offset: isize,
-) -> (Vec<(usize, usize)>, Vec<(usize, usize)>) {
-    let mut remaining_ranges: Vec<(usize, usize)> = vec![];
-    let mut transformed_ranges: Vec<(usize, usize)> = vec![];
+type Ranges = Vec<(usize, usize)>;
+fn lookup_index_range_item(ranges: Ranges, start: usize, end: usize, offset: isize) -> (Ranges, Ranges) {
+    let mut remaining_ranges: Ranges = vec![];
+    let mut transformed_ranges: Ranges = vec![];
     for range in ranges {
         if start <= range.0 && end > range.0 {
             let new_start = add_numbers(range.0, offset);
@@ -76,9 +72,9 @@ fn lookup_index_range_item(
     (transformed_ranges, remaining_ranges)
 }
 
-fn lookup_index_range(old_range: (usize, usize), map: &[Vec<usize>]) -> Vec<(usize, usize)> {
+fn lookup_index_range(old_range: (usize, usize), map: &[Vec<usize>]) -> Ranges {
     let mut remaining_ranges = vec![old_range];
-    let mut result: Vec<(usize, usize)> = vec![];
+    let mut result: Ranges = vec![];
     for map_item in map {
         let (mut cur_transformed, cur_remaining) = lookup_index_range_item(
             remaining_ranges,
@@ -105,16 +101,13 @@ fn calc_location_from_seeds(seeds: Vec<usize>, map: &HashMap<&str, Vec<Vec<usize
     indexes
 }
 
-fn calc_location_from_seed_ranges(
-    seed_ranges: Vec<(usize, usize)>,
-    map: &HashMap<&str, Vec<Vec<usize>>>,
-) -> Vec<(usize, usize)> {
+fn calc_location_from_seed_ranges(seed_ranges: Ranges, map: &HashMap<&str, Vec<Vec<usize>>>) -> Ranges {
     let mut indexes = seed_ranges;
     let mut find: &str = "seed";
     while find != "location" {
         let current_key = map.keys().filter(|key| key.starts_with(find)).collect::<Vec<_>>()[0];
         let current_map = map.get(current_key).unwrap();
-        let mut new_indexes: Vec<(usize, usize)> = vec![];
+        let mut new_indexes: Ranges = vec![];
         indexes
             .iter()
             .map(|old_index| lookup_index_range(*old_index, current_map))
@@ -125,15 +118,14 @@ fn calc_location_from_seed_ranges(
     indexes
 }
 
-fn challenge1(lines: &Vec<String>) -> usize {
+fn challenge1(lines: &[String]) -> usize {
     let (seeds, map) = parse_input(lines);
     *calc_location_from_seeds(seeds, &map).iter().min().unwrap()
 }
 
-fn challenge2(lines: &Vec<String>) -> usize {
+fn challenge2(lines: &[String]) -> usize {
     let (seeds, map) = parse_input(lines);
-    let seeds_transformed: Vec<(usize, usize)> =
-        seeds.chunks(2).map(|range| (range[0], range[0] + range[1] - 1)).collect();
+    let seeds_transformed: Ranges = seeds.chunks(2).map(|range| (range[0], range[0] + range[1] - 1)).collect();
     calc_location_from_seed_ranges(seeds_transformed, &map).iter().map(|range| range.0).min().unwrap()
 }
 

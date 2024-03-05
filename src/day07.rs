@@ -99,7 +99,7 @@ fn get_hand_rank_joker(cards: &str) -> u8 {
     }
 }
 
-fn compare_hands(hand1: &String, hand2: &String) -> Ordering {
+fn compare_hands(hand1: &str, hand2: &str) -> Ordering {
     let cards1 = hand1.split_at(5).0;
     let cards2 = hand2.split_at(5).0;
     let cards1_rank = get_hand_rank(cards1);
@@ -123,7 +123,7 @@ fn compare_hands(hand1: &String, hand2: &String) -> Ordering {
     Ordering::Equal
 }
 
-fn compare_hands_joker(hand1: &String, hand2: &String) -> Ordering {
+fn compare_hands_joker(hand1: &str, hand2: &str) -> Ordering {
     let cards1 = hand1.split_at(5).0;
     let cards2 = hand2.split_at(5).0;
     let cards1_rank = get_hand_rank_joker(cards1);
@@ -147,9 +147,9 @@ fn compare_hands_joker(hand1: &String, hand2: &String) -> Ordering {
     Ordering::Equal
 }
 
-fn challenge1(lines: &Vec<String>) -> usize {
+fn challenge1(lines: &[String]) -> usize {
     let mut sortable_lines = lines.to_owned();
-    sortable_lines.sort_by(compare_hands);
+    sortable_lines.sort_by(|hand1, hand2| compare_hands(hand1, hand2));
     sortable_lines
         .iter()
         .enumerate()
@@ -157,9 +157,9 @@ fn challenge1(lines: &Vec<String>) -> usize {
         .sum::<usize>()
 }
 
-fn challenge2(lines: &Vec<String>) -> usize {
+fn challenge2(lines: &[String]) -> usize {
     let mut sortable_lines = lines.to_owned();
-    sortable_lines.sort_by(compare_hands_joker);
+    sortable_lines.sort_by(|hand1, hand2| compare_hands_joker(hand1, hand2));
     sortable_lines
         .iter()
         .enumerate()

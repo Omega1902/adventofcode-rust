@@ -36,7 +36,7 @@ fn get_number(index: usize, line: &str, previous_line: Option<&String>, next_lin
     }
 }
 
-fn challenge1(lines: &Vec<String>) -> usize {
+fn challenge1(lines: &[String]) -> usize {
     let mut sum: usize = 0;
     for (line_number, line) in lines.iter().enumerate() {
         let mut index: usize = 0;
@@ -163,7 +163,7 @@ fn get_gear_value(index: usize, line: &str, prev_line: Option<&String>, next_lin
     product
 }
 
-fn challenge2(lines: &Vec<String>) -> usize {
+fn challenge2(lines: &[String]) -> usize {
     // sum the product of all gear numbers
     let mut sum: usize = 0;
     for (line_number, line) in lines.iter().enumerate() {
