@@ -26,6 +26,7 @@ fn run_day(day: u8, verbose: bool) {
         9 => adventofcode::day09::main(),
         10 => adventofcode::day10::main(verbose),
         11 => adventofcode::day11::main(),
+        12 => adventofcode::day12::main(),
         i => println!("Day {i} is not (yet) available"),
     }
 }
@@ -38,7 +39,7 @@ fn main() {
         return;
     }
 
-    let max_day = 11;
+    let max_day = 12;
     match args.day {
         None => {
             for day in 1..=max_day {
