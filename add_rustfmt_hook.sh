@@ -19,6 +19,7 @@ for file in $files; do
     fi
 done
 if [ ${#rust_files[@]} -ne 0 ]; then
+    git stash push -kuqm "before rustfmt hook"
     command -v rustfmt >/dev/null 2>&1 || { echo >&2 "Rustfmt is required but it's not installed. Aborting."; exit 1; }
     $(command -v rustfmt) ${rust_files[@]} &
 fi
@@ -26,6 +27,7 @@ wait
 if [ ${#rust_files[@]} -ne 0 ]; then
     git add ${rust_files[@]}
     echo "Formatting done, changed files: ${rust_files[@]}"
+    git stash pop -q
 else
     echo "No changes, formatting skipped"
 fi
