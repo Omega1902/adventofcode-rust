@@ -27,7 +27,7 @@ fn parse_input(lines: &[String]) -> (Vec<usize>, HashMap<&str, Vec<Vec<usize>>>)
     (seeds, map)
 }
 
-fn lookup_index(old_index: usize, map: &Vec<Vec<usize>>) -> usize {
+fn lookup_index(old_index: usize, map: &[Vec<usize>]) -> usize {
     for map_item in map {
         if map_item[1] <= old_index && map_item[1] + map_item[2] > old_index {
             return old_index + map_item[0] - map_item[1];

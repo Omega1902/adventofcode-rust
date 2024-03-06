@@ -1,3 +1,4 @@
+use indicatif::ProgressIterator;
 use itertools::Itertools;
 
 use crate::util::{extract_pos_numbers, print_full_result, read_lines};
@@ -74,9 +75,8 @@ fn _get_possible_varants(parts: &[char], groups: &[usize]) -> usize {
     if groups.is_empty() {
         if parts.contains(&'#') {
             return 0;
-        } else {
-            return 1;
         }
+        return 1;
     }
     let min_size = groups.iter().sum::<usize>() + groups.len() - 1;
     if parts.len() < min_size {
@@ -89,21 +89,27 @@ fn _get_possible_varants(parts: &[char], groups: &[usize]) -> usize {
     all_blocks.iter().map(|part| _get_possible_varants(part, next_groups)).sum()
 }
 
-fn get_possible_variants(line: &str) -> usize {
+fn get_possible_variants(line: &str, unfold: bool) -> usize {
     let (parts_string, groups_string) = line.split_once(' ').expect("file input not correct");
     let groups: Vec<usize> = extract_pos_numbers(groups_string);
     let parts = parts_string.chars().collect_vec();
 
-    _get_possible_varants(&parts, &groups)
+    if unfold {
+        let unfolded_groups = groups.repeat(5);
+        let unfolded_parts = [parts_string; 5].join("?").chars().collect_vec();
+        _get_possible_varants(&unfolded_parts, &unfolded_groups)
+    } else {
+        _get_possible_varants(&parts, &groups)
+    }
 }
 
 fn challenge1(grid: &[String]) -> usize {
     //7653 is right!
-    grid.iter().map(|line| get_possible_variants(line)).sum()
+    grid.iter().map(|line| get_possible_variants(line, false)).sum()
 }
 
-fn challenge2(_grid: &[String]) -> usize {
-    0
+fn challenge2(grid: &[String]) -> usize {
+    grid.iter().progress_count(grid.len() as u64).map(|line| get_possible_variants(line, true)).sum()
 }
 
 pub fn main() {
@@ -134,23 +140,23 @@ mod tests {
 
     #[test]
     fn test_get_possible_variants() {
-        assert_eq!(get_possible_variants("#??????#??. 2,7"), 1);
-        assert_eq!(get_possible_variants("#???????#??. 2,7"), 2);
-        assert_eq!(get_possible_variants("#??????#??###. 2,10"), 1);
-        assert_eq!(get_possible_variants("?#?? 2"), 2);
-        assert_eq!(get_possible_variants("??#?#?###????.????. 11,2"), 9);
-        assert_eq!(get_possible_variants("?????.#.?????##??? 2,1,1,2,1,5"), 3);
-        assert_eq!(get_possible_variants("?.????#??.??????#?.# 1,1,5,1,4,1"), 5);
-        assert_eq!(get_possible_variants("??.?#?#?.?..???#.?? 2,4,1,1,1"), 16);
-        assert_eq!(get_possible_variants("?#?###?.#?#????# 1,4,1,1,1"), 1);
+        assert_eq!(get_possible_variants("#??????#??. 2,7", false), 1);
+        assert_eq!(get_possible_variants("#???????#??. 2,7", false), 2);
+        assert_eq!(get_possible_variants("#??????#??###. 2,10", false), 1);
+        assert_eq!(get_possible_variants("?#?? 2", false), 2);
+        assert_eq!(get_possible_variants("??#?#?###????.????. 11,2", false), 9);
+        assert_eq!(get_possible_variants("?????.#.?????##??? 2,1,1,2,1,5", false), 3);
+        assert_eq!(get_possible_variants("?.????#??.??????#?.# 1,1,5,1,4,1", false), 5);
+        assert_eq!(get_possible_variants("??.?#?#?.?..???#.?? 2,4,1,1,1", false), 16);
+        assert_eq!(get_possible_variants("?#?###?.#?#????# 1,4,1,1,1", false), 1);
 
         let lines = to_lines(EXAMPLE_INPUT1);
-        assert_eq!(get_possible_variants(&lines[0]), 1);
-        assert_eq!(get_possible_variants(&lines[1]), 4);
-        assert_eq!(get_possible_variants(&lines[2]), 1);
-        assert_eq!(get_possible_variants(&lines[3]), 1);
-        assert_eq!(get_possible_variants(&lines[4]), 4);
-        assert_eq!(get_possible_variants(&lines[5]), 10);
+        assert_eq!(get_possible_variants(&lines[0], false), 1);
+        assert_eq!(get_possible_variants(&lines[1], false), 4);
+        assert_eq!(get_possible_variants(&lines[2], false), 1);
+        assert_eq!(get_possible_variants(&lines[3], false), 1);
+        assert_eq!(get_possible_variants(&lines[4], false), 4);
+        assert_eq!(get_possible_variants(&lines[5], false), 10);
     }
 
     #[test]
@@ -159,8 +165,7 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
     fn test_challenge2() {
-        assert_eq!(challenge2(&to_lines(EXAMPLE_INPUT1)), 1030);
+        assert_eq!(challenge2(&to_lines(EXAMPLE_INPUT1)), 525152);
     }
 }
